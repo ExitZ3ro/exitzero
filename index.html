@@ -1048,7 +1048,7 @@
       padding-left: 10px;
     }
     .role-card .time {
-      color: var(--fg-dim);
+      color: var(--phosphor);
       font-size: 12px;
       padding-top: 5px;
       display: flex;
@@ -1350,7 +1350,7 @@
     .role-meta-grid .v {
       color: var(--fg);
     }
-    .role-meta-grid #role-status {
+    .role-meta-grid #detail-status {
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--phosphor);
@@ -1565,7 +1565,78 @@
       color: var(--fg-dim);
     }
 
-    /* projects */
+    /* skills */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 12px 32px;
+      font-size: 14px;
+    }
+    .skills-grid .cat {
+      color: var(--phosphor);
+      text-align: right;
+      white-space: nowrap;
+    }
+    .skills-grid .list {
+      color: var(--fg);
+      line-height: 1.7;
+    }
+    .skills-grid .comma { color: var(--fg-dim); }
+
+    /* contact */
+    .contact {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 10px 32px;
+      font-size: 14px;
+    }
+    .contact .k {
+      color: var(--fg-dim);
+      text-align: right;
+      white-space: nowrap;
+    }
+    .contact .v a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 160ms ease;
+    }
+    .contact .v a:hover { border-bottom-color: var(--cyan); }
+
+    /* footer */
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 88px;
+      padding: 24px 0 40px;
+      border-top: 1px solid var(--border);
+      color: var(--fg-dim);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+    }
+    .footer .sig { color: var(--signature); }
+
+    @media (max-width: 640px) {
+      .skills-grid,
+      .contact {
+        grid-template-columns: 1fr;
+        gap: 2px 0;
+      }
+      .skills-grid .cat,
+      .contact .k {
+        text-align: left;
+        margin-top: 12px;
+      }
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .footer .kernel-line { text-align: left; }
+    }
+
 /* ============ DIGITAL RAIN (landing background) ============ */
     #rain {
       position: absolute;
@@ -1966,14 +2037,6 @@
       20%, 40%, 60%, 80% { transform: translateX(5px); }
     }
 
-    /* ============ WORKSPACE LOCK ICON ============ */
-    .workspaces a .lock {
-      color: var(--warning);
-      margin-left: 6px;
-      font-size: 10px;
-    }
-    .workspaces a.unlocked .lock { display: none; }
-
     /* Responsive */
     @media (max-width: 720px) {
       .status-bar .item:not(:last-child),
@@ -2062,7 +2125,7 @@
       <div class="view active" id="view-main">
 
       <!-- Hero -->
-      <header class="hero reveal" id="about">
+      <header class="hero" id="about">
         <div class="prompt">&gt; <span class="cmd">whoami</span></div>
         <h1>Rey Dela Cruz<span class="cursor" aria-hidden="true"></span></h1>
         <p class="role">
@@ -2088,7 +2151,7 @@
       </header>
 
       <!-- About -->
-      <section class="block about reveal">
+      <section class="block about">
         <div class="cmd-header">
           <span class="glyph">&gt;</span>
           <span class="name">cat about.md</span>
@@ -2110,7 +2173,7 @@
       </section>
 
       <!-- Skills -->
-      <section class="block reveal" id="skills">
+      <section class="block" id="skills">
         <div class="cmd-header">
           <span class="glyph">&gt;</span>
           <span class="name">cat skills.json</span>
@@ -2144,7 +2207,7 @@
       </section>
 
       <!-- Contact -->
-      <section class="block reveal" id="contact">
+      <section class="block" id="contact">
         <div class="cmd-header">
           <span class="glyph">&gt;</span>
           <span class="name">./contact --secure</span>
