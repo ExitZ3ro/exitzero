@@ -730,6 +730,7 @@
     #portfolio {
       position: relative;
       overflow-y: auto;
+      overscroll-behavior-y: contain;
       display: none;
       flex-direction: column;
     }
@@ -741,7 +742,7 @@
       max-width: 1160px;
       width: 100%;
       margin: 0 auto;
-      padding: 0 24px 120px;
+      padding: 0 24px;
     }
 
     /* i3wm / tmux status bar */
@@ -1576,7 +1577,7 @@
       justify-content: space-between;
       gap: 24px;
       margin-top: 88px;
-      padding: 24px 0 40px;
+      padding: 24px 0 calc(32px + env(safe-area-inset-bottom, 0px));
       border-top: 1px solid var(--border);
       color: var(--fg-dim);
       font-size: 11px;
@@ -1993,7 +1994,7 @@
       }
     }
     @media (max-width: 640px) {
-      .terminal-window { padding: 0 16px 80px; }
+      .terminal-window { padding: 0 16px; }
 
       /* The boot log fills a phone because 40px padding plus 14px type
          makes the longest line wrap, turning 19 lines into 30+ rows.
