@@ -976,7 +976,9 @@
     .hero .meta .k {
       color: var(--fg-dim);
     }
+    .hero .meta dd,
     .hero .meta .v {
+      margin: 0;
       color: var(--fg);
     }
     .hero .meta .v .tag {
@@ -1610,12 +1612,18 @@
         text-align: left;
         margin-top: 12px;
       }
+      /* Two rows rather than three: the kernel line is system output and
+         gets its own, while the copyright and `return 0;` keep the
+         left/right pairing they have on desktop. */
       .footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        flex-wrap: wrap;
+        gap: 10px 0;
       }
-      .footer .kernel-line { text-align: left; }
+      .footer .kernel-line {
+        order: -1;
+        flex: 0 0 100%;
+        text-align: left;
+      }
     }
 
 /* ============ DIGITAL RAIN (landing background) ============ */
@@ -2033,9 +2041,26 @@
       }
       .role-card .time { padding-top: 0; }
       .workspaces a { padding: 3px 8px; font-size: 11px; }
+      /* Break the declaration the way clang-format would: the string moves
+         to a continuation line with a hanging indent, and the trailing
+         comment drops below the statement it annotates. Desktop keeps the
+         single line. */
+      .hero .role {
+        font-size: 14px;
+        line-height: 1.9;
+      }
+      .hero .role .syn-str { display: inline-block; margin-left: 2ch; }
+      .hero .role .syn-op::after,
+      .hero .role .syn-punct::after { content: "\A"; white-space: pre; }
+
       .hero .meta {
         grid-template-columns: 1fr;
+        gap: 2px 0;
       }
+      .hero .meta .k {
+        margin-top: 12px;
+      }
+      .hero .meta .k:first-of-type { margin-top: 0; }
       .hero .meta .k::after {
         content: ":";
       }
