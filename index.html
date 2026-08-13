@@ -50,7 +50,11 @@
       --measure: 68ch;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-strong) transparent;
+    }
 
     html, body {
       margin: 0;
@@ -66,9 +70,6 @@
     }
     /* dimmed state applied on tab-hidden — paints briefly on refocus
        before transitioning back, giving the "waking up" feel. */
-    .screen {
-      transition: opacity 400ms ease, filter 480ms ease;
-    }
     /* Same containing-block hazard as .glitching — applied to the active
        screen, never to <body>. */
     .dimmed {
@@ -107,10 +108,6 @@
 
     /* ============ CUSTOM SCROLLBAR ============ */
     /* Firefox */
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: var(--border-strong) transparent;
-    }
     /* Chromium: Brave, Chrome, Edge, Opera */
     ::-webkit-scrollbar {
       width: 8px;
@@ -192,7 +189,7 @@
       inset: 0;
       display: none;
       opacity: 0;
-      transition: opacity 400ms ease;
+      transition: opacity 400ms ease, filter 480ms ease;
     }
     .screen.active {
       display: flex;
@@ -210,6 +207,8 @@
     }
 
     .landing-inner {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -730,7 +729,6 @@
     #portfolio {
       position: relative;
       overflow-y: auto;
-      overscroll-behavior-y: contain;
       display: none;
       flex-direction: column;
     }
@@ -1595,10 +1593,6 @@
       z-index: 0;
       pointer-events: none;
       opacity: 0.75;
-    }
-    .landing-inner {
-      position: relative;
-      z-index: 1;
     }
 
     /* ============ COMMAND BAR ============ */
