@@ -40,5 +40,13 @@ EXITZERO.role('shortid', {
     ],
 
     stack: ['C++', 'Python'],
+
+    // Optional. Bare paths, or { src, caption } for hover captions.
+    // Omit it entirely and no media section is rendered.
+    //
+    // gallery: [
+    //   'content/<slug>/airframe.png',
+    //   { src: 'content/<slug>/ground-station.png', caption: 'telemetry view' },
+    // ],
   },
 });

@@ -1453,25 +1453,6 @@
       text-transform: uppercase;
       margin-bottom: 12px;
     }
-    .role-media .placeholder {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 12px;
-    }
-    .role-media .placeholder .box {
-      aspect-ratio: 16 / 10;
-      background: var(--bg-panel);
-      border: 1px dashed var(--border-strong);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--fg-dim);
-      font-size: 12px;
-      letter-spacing: 0.06em;
-    }
-    .role-media .placeholder .box::before {
-      content: "[ media ]";
-    }
     /* real media grid — populated from ROLES[id].media */
     .role-media .media-grid {
       display: grid;
@@ -2311,14 +2292,7 @@
           <div class="tags" id="detail-stack"></div>
         </div>
 
-        <div class="role-media" id="detail-media">
-          <div class="label">// supplementary media (coming soon)</div>
-          <div class="placeholder">
-            <div class="box"></div>
-            <div class="box"></div>
-            <div class="box"></div>
-          </div>
-        </div>
+        <div class="role-media" id="detail-media"></div>
 
         <button type="button" class="back-link" data-view="experience"><span class="arrow">←</span> cd ..</button>
       </div>
@@ -3163,14 +3137,20 @@
         // otherwise show the placeholder boxes.
         const mediaHost = document.getElementById('detail-media');
         mediaHost.innerHTML = '';
-        if (r.media && r.media.length > 0) {
+        // `gallery` takes either bare paths or { src, caption } objects.
+        // An entry with neither renders no media section at all.
+        const gallery = (r.gallery || r.media || [])
+          .map(m => (typeof m === 'string' ? { src: m } : m))
+          .filter(m => m && m.src);
+
+        if (gallery.length > 0) {
           const label = document.createElement('div');
           label.className = 'label';
           label.textContent = '// supplementary media';
           mediaHost.appendChild(label);
           const grid = document.createElement('div');
           grid.className = 'media-grid';
-          r.media.forEach(m => {
+          gallery.forEach(m => {
             const item = document.createElement('a');
             item.className = 'media-item';
             item.href = m.src;
@@ -3200,15 +3180,6 @@
             grid.appendChild(item);
           });
           mediaHost.appendChild(grid);
-        } else {
-          const label = document.createElement('div');
-          label.className = 'label';
-          label.textContent = '// supplementary media (coming soon)';
-          mediaHost.appendChild(label);
-          const placeholder = document.createElement('div');
-          placeholder.className = 'placeholder';
-          for (let i = 0; i < 3; i++) placeholder.appendChild(document.createElement('div')).className = 'box';
-          mediaHost.appendChild(placeholder);
         }
       }
 
