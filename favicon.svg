@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- ExitZero mark: a phosphor prompt on the site's background.
+       SVG so it stays crisp at every size and needs no raster variants. -->
+  <rect width="32" height="32" rx="5" fill="#08080c"/>
+  <path d="M7 10 L13 16 L7 22"
+        fill="none" stroke="#4dffb0" stroke-width="3"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="16.5" y="19.5" width="9" height="3" rx="1.5" fill="#4dffb0"/>
+</svg>

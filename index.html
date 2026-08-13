@@ -1,0 +1,5021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExitZero — Rey Dela Cruz</title>
+  <meta name="description" content="Rey Dela Cruz — Aerospace Software Engineer. Embedded software for multi-domain autonomous vehicles: air, land, sea and subsurface." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="canonical" href="https://exitzero.cc/" />
+
+  <!-- Link previews. og:image must be an absolute URL — relative paths are
+       ignored by every scraper. Update the domain here if it ever moves. -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://exitzero.cc/" />
+  <meta property="og:title"       content="ExitZero — Rey Dela Cruz" />
+  <meta property="og:description" content="Aerospace Software Engineer. Embedded software for multi-domain autonomous vehicles: air, land, sea and subsurface. Success is leaving no trace." />
+  <meta property="og:image"       content="https://exitzero.cc/assets/og-card.png" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name"   content="ExitZero" />
+
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="ExitZero — Rey Dela Cruz" />
+  <meta name="twitter:description" content="Aerospace Software Engineer. Embedded software for multi-domain autonomous vehicles. Success is leaving no trace." />
+  <meta name="twitter:image"       content="https://exitzero.cc/assets/og-card.png" />
+
+  <meta name="theme-color" content="#08080c" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #08080c;
+      --bg-elevated: #101018;
+      --bg-panel: #0d0d14;
+      --border: #1a1a25;
+      --border-strong: #2a2a3a;
+      --fg: #e8e8f0;
+      --fg-muted: #8a8a99;
+      --fg-dim: #4a4a55;
+      --phosphor: #4dffb0;
+      --phosphor-dim: #2d9a68;
+      --cyan: #7de5ff;
+      --signature: #ff2975;
+      --warning: #ffb800;
+      --danger: #ff4d5e;
+
+      --mono: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+
+      --measure: 68ch;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    /* dimmed state applied on tab-hidden — paints briefly on refocus
+       before transitioning back, giving the "waking up" feel. */
+    .screen {
+      transition: opacity 400ms ease, filter 480ms ease;
+    }
+    /* Same containing-block hazard as .glitching — applied to the active
+       screen, never to <body>. */
+    .dimmed {
+      filter: grayscale(1) brightness(0.28) blur(0.4px);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.015) 0px,
+        rgba(255,255,255,0.015) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      z-index: 9998;
+      mix-blend-mode: overlay;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+      z-index: 9999;
+    }
+
+    ::selection {
+      background: var(--phosphor);
+      color: var(--bg);
+    }
+
+    /* ============ CUSTOM SCROLLBAR ============ */
+    /* Firefox */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-strong) transparent;
+    }
+    /* Chromium: Brave, Chrome, Edge, Opera */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 0;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--phosphor-dim);
+    }
+    ::-webkit-scrollbar-thumb:active {
+      background: var(--phosphor);
+    }
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 120ms ease, color 120ms ease;
+    }
+    a:hover { border-bottom-color: var(--cyan); }
+
+    button {
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* ============ FOCUS RINGS ============
+       corner-brackets on interactive elements (uses ::before pseudo,
+       so it plays nicely with any ::after already used for kbd hints etc).
+       inputs keep a plain outline because they don't accept ::before. */
+    a:focus-visible,
+    button:focus-visible,
+    [tabindex]:focus-visible,
+    .role-card:focus-visible {
+      outline: none;
+      position: relative;
+    }
+    a:focus-visible::before,
+    button:focus-visible::before,
+    [tabindex]:focus-visible::before,
+    .role-card:focus-visible::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      pointer-events: none;
+      z-index: 50;
+      background:
+        linear-gradient(to right,  var(--phosphor) 10px, transparent 10px) top left     / 100% 2px no-repeat,
+        linear-gradient(to bottom, var(--phosphor) 10px, transparent 10px) top left     / 2px 100% no-repeat,
+        linear-gradient(to left,   var(--phosphor) 10px, transparent 10px) top right    / 100% 2px no-repeat,
+        linear-gradient(to bottom, var(--phosphor) 10px, transparent 10px) top right    / 2px 100% no-repeat,
+        linear-gradient(to right,  var(--phosphor) 10px, transparent 10px) bottom left  / 100% 2px no-repeat,
+        linear-gradient(to top,    var(--phosphor) 10px, transparent 10px) bottom left  / 2px 100% no-repeat,
+        linear-gradient(to left,   var(--phosphor) 10px, transparent 10px) bottom right / 100% 2px no-repeat,
+        linear-gradient(to top,    var(--phosphor) 10px, transparent 10px) bottom right / 2px 100% no-repeat;
+    }
+    input:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--phosphor);
+      outline-offset: 2px;
+    }
+
+    /* ============ SCREENS ============ */
+    .screen {
+      position: fixed;
+      inset: 0;
+      display: none;
+      opacity: 0;
+      transition: opacity 400ms ease;
+    }
+    .screen.active {
+      display: flex;
+      opacity: 1;
+    }
+    .screen.leaving { opacity: 0; }
+
+    /* ============ LANDING ============ */
+    #landing {
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .landing-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      max-width: 800px;
+    }
+
+    .brand {
+      font-weight: 700;
+      font-size: clamp(48px, 11vw, 120px);
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      color: var(--fg);
+      text-shadow: 0 0 30px rgba(77, 255, 176, 0.08);
+      visibility: hidden;
+    }
+    .brand.ready { visibility: visible; }
+    .brand .exit { color: var(--fg); }
+    .brand .zero { color: var(--phosphor); }
+
+    .tagline {
+      font-weight: 300;
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--fg-muted);
+      letter-spacing: 0.02em;
+      visibility: hidden;
+    }
+    .tagline.ready { visibility: visible; }
+    .tagline .signature {
+      color: var(--signature);
+      font-weight: 500;
+      display: inline-block;
+      opacity: 0;
+    }
+    .tagline .signature.appear {
+      animation: signaturePunch 460ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes signaturePunch {
+      0% {
+        opacity: 0;
+        transform: scale(0);
+        text-shadow: 0 0 24px var(--signature);
+      }
+      60% {
+        opacity: 1;
+        transform: scale(1.35);
+        text-shadow:
+          0 0 28px var(--signature),
+          0 0 50px var(--signature);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        text-shadow: 0 0 10px rgba(255, 45, 117, 0.4);
+      }
+    }
+
+    .initialize {
+      margin-top: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-panel);
+      color: var(--phosphor);
+      font-size: 14px;
+      transition: all 160ms ease, opacity 700ms ease, transform 700ms ease;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+    }
+    .initialize.ready {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .initialize:hover {
+      border-color: var(--phosphor);
+      background: rgba(77, 255, 176, 0.05);
+      box-shadow: 0 0 24px rgba(77, 255, 176, 0.15);
+    }
+    .initialize .hint {
+      color: var(--fg-dim);
+      font-size: 12px;
+      margin-left: 12px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 0.55ch;
+      height: 1em;
+      background: var(--signature);
+      vertical-align: text-bottom;
+      animation: blink 1s steps(2, end) infinite;
+      box-shadow: 0 0 8px var(--signature);
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* ============ TRANSITION / BOOT ============ */
+    #transition {
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 40px;
+      overflow: hidden;
+    }
+    .boot-log {
+      font-size: 14px;
+      color: var(--phosphor-dim);
+      white-space: pre-wrap;
+      max-width: 800px;
+    }
+    .boot-log > * {
+      animation: bootLineIn 50ms ease-out both;
+    }
+    @keyframes bootLineIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .boot-log .ok { color: var(--phosphor); }
+    .boot-log .warn { color: var(--warning); }
+    .boot-log .accent { color: var(--cyan); }
+    .boot-log .sig { color: var(--signature); }
+    .boot-log .err { color: var(--danger); }
+    /* not a status colour — the banner stands out by being the only
+       neutral-white line in a log of greens and cyans.
+       NB: named `banner`, not `brand` — `.brand` is the landing wordmark
+       (hidden until reveal, 120px) and would leak in here. */
+    .boot-log .banner {
+      color: var(--fg);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    /* blinking magenta cursor for the boot login finale */
+    .boot-cursor {
+      display: inline-block;
+      width: 0.6ch;
+      height: 1em;
+      background: var(--signature);
+      vertical-align: text-bottom;
+      animation: blink 1s steps(2, end) infinite;
+      box-shadow: 0 0 8px var(--signature);
+      margin-left: 2px;
+    }
+
+    /* [ OK ] exit 0 tag at the bottom of every .block section */
+    section.block::after {
+      content: "[  OK  ] exit 0";
+      display: block;
+      color: var(--fg-dim);
+      font-size: 11px;
+      margin-top: 32px;
+      letter-spacing: 0.04em;
+      opacity: 0.65;
+    }
+
+    /* signal glitch — a rare, dramatic malfunction. multi-phase:
+       aggressive shake + RGB channel separation + slight skew + brief
+       negative flash + scanline overlay. reads as "the signal properly
+       lost lock for half a second." fires every 10s in dev; tune up
+       to 60-90s for production. */
+    /* Applied to the active .screen, never to <body>. A transform or filter
+       on an ancestor makes it the containing block for position:fixed
+       descendants — putting this on <body> tore every screen out of place
+       for the duration of the glitch. */
+    .glitching {
+      animation: signalGlitch 480ms steps(20, jump-none);
+    }
+    @keyframes signalGlitch {
+      0%   { transform: translate(0, 0) skew(0);            filter: none; }
+      6%   {
+        transform: translate(-7px, -1px) skew(-1deg);
+        filter: drop-shadow(7px 0 rgba(255, 45, 117, 0.75)) drop-shadow(-7px 0 rgba(125, 229, 255, 0.75));
+      }
+      12%  {
+        transform: translate(6px, 2px) skew(0.8deg);
+        filter: drop-shadow(-6px 0 rgba(255, 45, 117, 0.7)) drop-shadow(6px 0 rgba(125, 229, 255, 0.7)) brightness(1.25);
+      }
+      20%  {
+        transform: translate(-9px, 0) skew(-0.4deg);
+        filter: invert(0.18) contrast(1.3);
+      }
+      28%  {
+        transform: translate(5px, -2px) scale(1.008);
+        filter: drop-shadow(9px 0 rgba(255, 45, 117, 0.7)) drop-shadow(-9px 0 rgba(125, 229, 255, 0.7));
+      }
+      36%  {
+        transform: translate(-3px, 1px) skew(0.6deg);
+        filter: hue-rotate(45deg) brightness(1.15);
+      }
+      46%  {
+        transform: translate(4px, 0);
+        filter: drop-shadow(-4px 0 rgba(255, 45, 117, 0.6)) drop-shadow(4px 0 rgba(125, 229, 255, 0.6));
+      }
+      58%  {
+        transform: translate(-2px, -1px);
+        filter: drop-shadow(3px 0 rgba(255, 45, 117, 0.5)) drop-shadow(-3px 0 rgba(125, 229, 255, 0.5)) contrast(1.15);
+      }
+      72%  {
+        transform: translate(2px, 1px);
+        filter: drop-shadow(-2px 0 rgba(255, 45, 117, 0.4)) drop-shadow(2px 0 rgba(125, 229, 255, 0.4));
+      }
+      86%  { transform: translate(-1px, 0); filter: brightness(1.05); }
+      100% { transform: translate(0, 0) skew(0);            filter: none; }
+    }
+    /* scanline overlay that flashes during the glitch */
+    .glitch-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      background:
+        repeating-linear-gradient(0deg,
+          rgba(77, 255, 176, 0.09) 0,
+          rgba(77, 255, 176, 0.09) 2px,
+          transparent 2px,
+          transparent 4px),
+        linear-gradient(180deg,
+          transparent 20%,
+          rgba(255, 45, 117, 0.06) 30%,
+          transparent 45%,
+          rgba(125, 229, 255, 0.05) 55%,
+          transparent 70%);
+      mix-blend-mode: screen;
+      animation: glitchOverlay 480ms steps(10, jump-none);
+    }
+    @keyframes glitchOverlay {
+      0%   { opacity: 0; transform: translateY(0); }
+      15%  { opacity: 1; transform: translateY(-8px); }
+      35%  { opacity: 0.7; transform: translateY(6px); }
+      55%  { opacity: 0.9; transform: translateY(-4px); }
+      75%  { opacity: 0.4; transform: translateY(2px); }
+      100% { opacity: 0; transform: translateY(0); }
+    }
+
+    /* individual horizontal page tears — multiple appear per glitch
+       with random Y positions, random widths, random anchoring (some
+       from the left edge, some from the right, some floating middle
+       chunks), and randomized color variants. all use steps() so the
+       motion is choppy/digital rather than smooth. */
+    .page-tear {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9997;
+      animation: pageTearFire 460ms steps(6, jump-none) forwards;
+    }
+    /* variant 0 — phosphor fill with magenta/cyan bordering */
+    .page-tear[data-variant="0"] {
+      background: rgba(77, 255, 176, 0.10);
+      border-top: 1px solid rgba(255, 45, 117, 0.9);
+      border-bottom: 1px solid rgba(125, 229, 255, 0.9);
+      mix-blend-mode: difference;
+    }
+    /* variant 1 — solid magenta slab */
+    .page-tear[data-variant="1"] {
+      background: rgba(255, 45, 117, 0.35);
+      mix-blend-mode: screen;
+    }
+    /* variant 2 — solid cyan slab */
+    .page-tear[data-variant="2"] {
+      background: rgba(125, 229, 255, 0.35);
+      mix-blend-mode: screen;
+    }
+    /* variant 3 — thin warning-yellow scanline (data-error look) */
+    .page-tear[data-variant="3"] {
+      background: rgba(255, 184, 0, 0.7);
+      border: none;
+      mix-blend-mode: difference;
+    }
+    /* variant 4 — inverted band (dark strip that inverts what's under) */
+    .page-tear[data-variant="4"] {
+      background: rgba(0, 0, 0, 0.6);
+      mix-blend-mode: difference;
+    }
+    @keyframes pageTearFire {
+      0%   { opacity: 0; transform: translateX(0); }
+      10%  { opacity: 1; transform: translateX(var(--tear-x, 15px)); }
+      30%  { opacity: 0.95; transform: translateX(calc(var(--tear-x, 15px) * -0.8)); }
+      50%  { opacity: 0.9; transform: translateX(calc(var(--tear-x, 15px) * 0.5)); }
+      70%  { opacity: 0.7; transform: translateX(calc(var(--tear-x, 15px) * -0.3)); }
+      85%  { opacity: 0.4; transform: translateX(calc(var(--tear-x, 15px) * 0.15)); }
+      100% { opacity: 0; transform: translateX(0); }
+    }
+
+    /* ============ PROJECTS LIST (open, one locked entry) ============ */
+    .proj-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .proj-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: max-content 1fr max-content;
+      gap: 20px;
+      align-items: start;
+      width: 100%;
+      padding: 20px 18px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-bottom-color: var(--border);
+      color: inherit;
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+      overflow: hidden;
+      transition: background 200ms ease, border-color 200ms ease, padding-left 200ms ease;
+    }
+    .proj-card:hover {
+      background: rgba(77, 255, 176, 0.03);
+      border-color: var(--border-strong);
+      padding-left: 26px;
+    }
+    .proj-perm {
+      color: var(--fg-dim);
+      font-size: 12px;
+      padding-top: 3px;
+      letter-spacing: 0.02em;
+    }
+    .proj-body h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--fg);
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .proj-tag {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      border: 1px solid var(--border-strong);
+      padding: 1px 7px;
+    }
+    .proj-tag.danger {
+      color: var(--danger);
+      border-color: rgba(255, 77, 94, 0.4);
+    }
+    .proj-body p {
+      margin: 0 0 10px;
+      color: var(--fg-muted);
+      font-size: 13px;
+      line-height: 1.65;
+      max-width: var(--measure);
+    }
+    .proj-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .proj-stack span {
+      font-size: 11px;
+      color: var(--fg-dim);
+      border: 1px solid var(--border);
+      padding: 1px 7px;
+    }
+    .proj-arrow {
+      color: var(--fg-dim);
+      font-size: 14px;
+      padding-top: 2px;
+      transition: transform 200ms ease, color 200ms ease;
+    }
+    .proj-card:hover .proj-arrow {
+      color: var(--phosphor);
+      transform: translateX(4px);
+    }
+
+    /* the locked entry — the eye-catcher */
+    .proj-card.locked {
+      border-color: rgba(255, 77, 94, 0.25);
+      background: rgba(255, 77, 94, 0.02);
+      margin-top: 18px;
+    }
+    .proj-card.locked::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: repeating-linear-gradient(
+        45deg,
+        var(--danger) 0 5px,
+        transparent 5px 10px);
+      opacity: 0.7;
+    }
+    .proj-card.locked:hover {
+      background: rgba(255, 77, 94, 0.05);
+      border-color: var(--danger);
+    }
+    .proj-card.locked .proj-perm { color: var(--danger); }
+    .proj-card.locked .proj-stack span {
+      color: var(--danger);
+      border-color: rgba(255, 77, 94, 0.3);
+    }
+    .proj-card.locked:hover .proj-arrow { color: var(--danger); }
+    /* once cracked, it settles into the rest of the list */
+    /* once cracked, it settles into the rest of the list */
+    .proj-card.locked.unlocked {
+      border-color: var(--border-strong);
+      background: transparent;
+    }
+    .proj-card.locked.unlocked::before { opacity: 0; }
+    .proj-card.locked.unlocked .proj-perm { color: var(--fg-dim); }
+    .proj-card.locked.unlocked .proj-tag.danger {
+      color: var(--phosphor);
+      border-color: var(--phosphor-dim);
+    }
+
+    @media (max-width: 640px) {
+      .proj-card {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .proj-arrow { display: none; }
+    }
+
+    /* full-screen overlay the matrix dissolve draws into */
+    .dissolve-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10000;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 260ms ease;
+    }
+    .dissolve-canvas.fading { opacity: 0; }
+
+    /* ============ VIEW: 404 (SEGFAULT core dump) ============ */
+    .segfault {
+      padding: 40px 0 0;
+      max-width: 720px;
+    }
+    .segfault-tag {
+      display: inline-block;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 2px 10px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      margin-bottom: 20px;
+      animation: recPulse 1.4s ease-in-out infinite;
+    }
+    .segfault-title {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 10px;
+      color: var(--fg);
+    }
+    .segfault-sub {
+      color: var(--fg-muted);
+      font-size: 13px;
+      margin: 0 0 40px;
+      letter-spacing: 0.02em;
+    }
+    .segfault-trace,
+    .segfault-code,
+    .segfault-fault,
+    .segfault-exit {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--fg-muted);
+      margin-bottom: 24px;
+    }
+    .segfault-trace .trace-line { padding-left: 8px; }
+    .segfault-trace .tk,
+    .segfault-fault .tk,
+    .segfault-exit .tk {
+      color: var(--fg-dim);
+      margin-right: 6px;
+    }
+    .segfault-fault {
+      color: var(--danger);
+    }
+    .segfault-code {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      padding: 16px 18px;
+      color: var(--fg);
+    }
+    .segfault-code .c    { color: var(--fg-dim); margin-right: 6px; }
+    .segfault-code .s    { color: var(--warning); }
+    .segfault-code .n    { color: var(--signature); }
+    .segfault-code .co   { color: var(--fg-muted); font-style: italic; }
+    .segfault-code .k    { color: var(--cyan); }
+    .segfault-code .err-underline .e { color: var(--danger); }
+    .segfault-code .err-underline { color: var(--danger); }
+    .segfault-exit .ec {
+      color: var(--danger);
+      font-weight: 500;
+    }
+
+    /* reconnect toast when the tab is refocused */
+    .reconnect-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      background: var(--bg-panel);
+      border: 1px solid var(--phosphor-dim);
+      color: var(--phosphor);
+      padding: 8px 14px;
+      font-size: 12px;
+      z-index: 9999;
+      opacity: 0;
+      transform: translate(-50%, 8px);
+      transition: opacity 400ms ease, transform 400ms ease;
+      pointer-events: none;
+      letter-spacing: 0.02em;
+    }
+    .reconnect-toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* ============ PORTFOLIO ============ */
+    #portfolio {
+      position: relative;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+    }
+    #portfolio.active {
+      display: flex;
+    }
+
+    .terminal-window {
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 24px 120px;
+    }
+
+    /* i3wm / tmux status bar */
+    .window-chrome {
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+      font-size: 12px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .workspaces {
+      display: flex;
+      align-items: stretch;
+      gap: 2px;
+      flex-wrap: wrap;
+    }
+    .workspaces a {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      color: var(--fg-muted);
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      border-bottom: none;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      transition: color 120ms ease, background 120ms ease, border-color 120ms ease;
+    }
+    .workspaces a .num {
+      color: var(--fg-dim);
+      margin-right: 6px;
+    }
+    .workspaces a:hover {
+      color: var(--phosphor);
+      background: rgba(77, 255, 176, 0.04);
+    }
+    .workspaces a.active {
+      color: var(--bg);
+      background: var(--phosphor);
+      border-color: var(--phosphor);
+    }
+    .workspaces a.active .num {
+      color: var(--bg);
+      opacity: 0.6;
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--fg-muted);
+      font-size: 12px;
+    }
+    .status-bar .item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-bar .sep {
+      color: var(--fg-dim);
+    }
+    .status-bar .k {
+      color: var(--fg-dim);
+    }
+    .status-bar .v {
+      color: var(--fg);
+    }
+    .status-bar .indicator {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--phosphor);
+      box-shadow: 0 0 6px var(--phosphor);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .status-bar .indicator.offline {
+      background: var(--danger);
+      box-shadow: 0 0 8px var(--danger);
+      animation: pulseOffline 0.9s ease-in-out infinite;
+    }
+    .status-bar .item.offline .v {
+      color: var(--danger);
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    @keyframes pulseOffline {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
+    .hero {
+      padding: 48px 0 56px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+    }
+    .hero .prompt {
+      color: var(--phosphor);
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+    .hero .prompt .cmd { color: var(--fg); }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      margin: 0 0 12px;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+    .hero h1 .cursor {
+      width: 0.55ch;
+      height: 0.72em;
+      margin-left: 12px;
+      vertical-align: baseline;
+    }
+    .hero .role {
+      color: var(--fg-muted);
+      font-size: 16px;
+      margin: 0 0 24px;
+    }
+    .hero .role .sep {
+      color: var(--fg-dim);
+      margin: 0 12px;
+    }
+    .hero .role .cyan { color: var(--cyan); }
+
+    /* editor-syntax coloring in the hero title line */
+    .hero .role .syn-type {
+      color: var(--cyan);
+    }
+    .hero .role .syn-var {
+      color: var(--fg);
+      font-weight: 500;
+    }
+    .hero .role .syn-op { color: var(--fg-dim); }
+    .hero .role .syn-str { color: var(--warning); }
+    .hero .role .syn-punct { color: var(--fg-dim); }
+    .hero .role .syn-comment {
+      color: var(--fg-muted);
+      font-style: italic;
+    }
+
+    /* FBI-style redaction bar — text is hidden behind a solid bar
+       (like declassified documents). Hover slides the bar off and
+       reveals the underlying "available on request" text.
+       Doesn't scream for attention like the previous yellow box did. */
+    .redacted-inline {
+      display: inline-block;
+      color: transparent;
+      background: var(--fg);
+      padding: 0 4px;
+      cursor: help;
+      user-select: none;
+      transition: color 200ms ease, background 200ms ease;
+    }
+    .redacted-inline:hover {
+      color: var(--fg);
+      background: transparent;
+    }
+
+    /* offline: freeze net counters, red them out, strike them through */
+    .status-bar .item.net-frozen .v {
+      color: var(--danger);
+      text-decoration: line-through;
+      text-decoration-color: rgba(255, 77, 94, 0.5);
+    }
+    .status-bar .item.net-frozen {
+      color: var(--danger);
+    }
+
+    /* role-card loading state (between click and transition) */
+    .role-card.loading {
+      animation: cardPulse 700ms ease-in-out infinite;
+      padding-left: 10px;
+    }
+    @keyframes cardPulse {
+      0%, 100% { background: rgba(77, 255, 176, 0.04); }
+      50%      { background: rgba(77, 255, 176, 0.14); }
+    }
+    .role-card.loading .click-hint {
+      opacity: 1;
+      transform: translateX(0);
+      color: var(--phosphor);
+    }
+
+    /* auth rate-limited (too many failed attempts) */
+    .auth-form.rate-limited {
+      border-color: var(--danger);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .auth-form.rate-limited .p {
+      color: var(--danger);
+    }
+    .auth-form.rate-limited .auth-input {
+      color: var(--fg-dim);
+    }
+
+    /* footer kernel/build line */
+    .footer .kernel-line {
+      color: var(--fg-dim);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      text-align: center;
+      flex: 1;
+    }
+    .hero .meta {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 6px 24px;
+      margin-top: 32px;
+      font-size: 13px;
+    }
+    .hero .meta .k {
+      color: var(--fg-dim);
+    }
+    .hero .meta .v {
+      color: var(--fg);
+    }
+    .hero .meta .v .tag {
+      display: inline-block;
+      color: var(--phosphor);
+      margin-right: 8px;
+    }
+
+    section.block {
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    section.block:last-of-type { border-bottom: none; }
+
+    .cmd-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .cmd-header .glyph {
+      color: var(--phosphor);
+      font-weight: 500;
+    }
+    .cmd-header .name {
+      color: var(--fg);
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .cmd-header .comment {
+      color: var(--fg-dim);
+      font-size: 12px;
+      margin-left: auto;
+    }
+
+    /* about */
+    .about p {
+      max-width: var(--measure);
+      color: var(--fg);
+      margin: 0 0 16px;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .about p .accent { color: var(--phosphor); }
+    .about p .cyan { color: var(--cyan); }
+    .about p .sig { color: var(--signature); }
+
+    /* experience list — clickable role cards */
+    .role-card {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 24px;
+      padding: 22px 20px 22px 0;
+      border: none;
+      border-top: 1px dashed var(--border);
+      background: transparent;
+      color: inherit;
+      font-family: inherit;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+      transition: background 200ms ease, padding-left 200ms ease;
+      position: relative;
+    }
+    .role-card:first-of-type { border-top: none; }
+    .role-card:hover {
+      background: rgba(77, 255, 176, 0.025);
+      padding-left: 10px;
+    }
+    .role-card .time {
+      color: var(--fg-dim);
+      font-size: 12px;
+      padding-top: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .role-card .time .active-tag {
+      display: inline-block;
+      color: var(--phosphor);
+      font-size: 10px;
+      padding: 2px 8px;
+      border: 1px solid var(--phosphor-dim);
+      letter-spacing: 0.08em;
+    }
+    .role-card .body h3 {
+      margin: 0 0 4px;
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--fg);
+    }
+    .role-card .body h3 .company-tag {
+      color: var(--cyan);
+      font-size: 14px;
+      margin-left: 10px;
+      font-weight: 400;
+    }
+    .role-card .body .company {
+      color: var(--fg-muted);
+      font-size: 14px;
+      margin: 0 0 10px;
+    }
+    .role-card .body p {
+      color: var(--fg-muted);
+      font-size: 13px;
+      margin: 6px 0 0;
+      max-width: var(--measure);
+      line-height: 1.65;
+    }
+    .role-card .click-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--phosphor);
+      font-size: 12px;
+      margin-top: 14px;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 200ms ease, transform 200ms ease;
+    }
+    .role-card:hover .click-hint {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .role-card .click-hint .arrow {
+      transition: transform 200ms ease;
+    }
+    .role-card:hover .click-hint .arrow {
+      transform: translateX(3px);
+    }
+
+    /* ============ ROLE DETAIL VIEW (case study) ============ */
+    .role-detail-header {
+      padding: 8px 0 32px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    .role-title-block {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .role-title-text {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .role-logo {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      padding: 4px 0;
+    }
+    .role-logo[hidden] { display: none; }
+    .role-logo img {
+      max-height: 100%;
+      max-width: 200px;
+      object-fit: contain;
+      display: block;
+    }
+    @media (max-width: 640px) {
+      .role-title-block {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .role-logo {
+        margin-top: 8px;
+        order: -1;
+      }
+    }
+    .role-detail-header h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+    .role-detail-header .company-line {
+      color: var(--cyan);
+      font-size: 16px;
+      margin: 0;
+    }
+    .role-detail-header .company-line .sep {
+      color: var(--fg-dim);
+      margin: 0 10px;
+    }
+    .role-detail-header .company-line .period {
+      color: var(--fg-muted);
+    }
+    .role-detail-header .company-line .active-tag {
+      display: inline-block;
+      color: var(--phosphor);
+      font-size: 10px;
+      margin-left: 8px;
+      padding: 1px 6px;
+      border: 1px solid var(--phosphor-dim);
+      letter-spacing: 0.08em;
+    }
+
+    /* ============ VIDEO FEED (surveillance-style) ============ */
+    .role-feed {
+      margin: 0 0 40px;
+      border: 1px solid var(--border-strong);
+      background: #000;
+      overflow: hidden;
+    }
+    .role-feed[hidden] { display: none; }
+
+    .role-feed .feed-chrome {
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-panel);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+    }
+    .role-feed .feed-left,
+    .role-feed .feed-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .role-feed .feed-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--phosphor);
+      box-shadow: 0 0 6px var(--phosphor);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .role-feed .feed-label { color: var(--phosphor); }
+    .role-feed .feed-rec {
+      color: var(--phosphor);
+      animation: recPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes recPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .role-feed .feed-time {
+      color: var(--fg-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* no-signal chrome: status dot goes red, label + PLAYBACK-slot go
+       danger, frame counter dims so the whole telemetry row honestly
+       reflects "there is nothing playing right now". */
+    .role-feed.no-signal .feed-status-dot {
+      background: var(--danger);
+      box-shadow: 0 0 6px var(--danger);
+      animation: recPulse 0.9s ease-in-out infinite;
+    }
+    .role-feed.no-signal .feed-label { color: var(--danger); }
+    .role-feed.no-signal .feed-rec   { color: var(--danger); }
+    .role-feed.no-signal .feed-time  { color: var(--fg-dim); }
+    .role-feed .feed-viewport {
+      position: relative;
+      aspect-ratio: 16 / 6;
+      background: #000;
+      overflow: hidden;
+    }
+    .role-feed video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* CRT scanlines over the video */
+    .role-feed .feed-scanlines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.18) 0,
+        rgba(0, 0, 0, 0.18) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      mix-blend-mode: multiply;
+      z-index: 2;
+    }
+    /* vignette to darken the edges */
+    .role-feed .feed-vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 42%, rgba(0, 0, 0, 0.65) 100%);
+      z-index: 3;
+    }
+    /* corner brackets — "targeting reticle" style */
+    .role-feed .feed-corners::before,
+    .role-feed .feed-corners::after {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--phosphor);
+      pointer-events: none;
+      z-index: 4;
+      opacity: 0.55;
+    }
+    .role-feed .feed-corners::before {
+      top: 12px;
+      left: 12px;
+      border-right: none;
+      border-bottom: none;
+    }
+    .role-feed .feed-corners::after {
+      bottom: 12px;
+      right: 12px;
+      border-left: none;
+      border-top: none;
+    }
+
+    /* fallback overlay when the video file isn't found / not loaded */
+    .role-feed .feed-missing {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background:
+        repeating-linear-gradient(45deg, rgba(255, 45, 117, 0.04) 0 12px, transparent 12px 24px),
+        var(--bg-panel);
+      color: var(--danger);
+      font-size: 13px;
+      z-index: 5;
+      text-align: center;
+      padding: 20px;
+    }
+    .role-feed .feed-missing.show { display: flex; }
+    .role-feed .feed-missing .feed-missing-label {
+      font-size: 14px;
+      letter-spacing: 0.15em;
+      animation: recPulse 1.4s ease-in-out infinite;
+    }
+    .role-feed .feed-missing .feed-missing-hint {
+      color: var(--fg-muted);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+    }
+    .role-feed .feed-missing code {
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      padding: 1px 6px;
+      color: var(--phosphor);
+    }
+
+    .role-meta-grid {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 8px 32px;
+      font-size: 13px;
+      margin-bottom: 40px;
+    }
+    .role-meta-grid .k {
+      color: var(--fg-dim);
+      text-transform: lowercase;
+    }
+    .role-meta-grid .v {
+      color: var(--fg);
+    }
+    .role-meta-grid #role-status {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--phosphor);
+    }
+
+    .role-project-box {
+      border-left: 2px solid var(--phosphor);
+      padding: 4px 0 4px 16px;
+      margin-bottom: 40px;
+    }
+    .role-project-box .label {
+      color: var(--phosphor);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .role-project-box .name {
+      color: var(--fg);
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0 0 8px;
+    }
+    .role-project-box .desc {
+      color: var(--fg-muted);
+      font-size: 14px;
+      margin: 0;
+      line-height: 1.65;
+      max-width: var(--measure);
+    }
+
+    .role-section {
+      padding: 20px 0;
+      border-top: 1px dashed var(--border);
+    }
+    .role-section:first-of-type { border-top: none; }
+    .role-section .rs-title {
+      color: var(--phosphor);
+      font-size: 15px;
+      margin: 0 0 10px;
+      font-weight: 500;
+    }
+    .role-section .rs-title::before {
+      content: "> ";
+      color: var(--fg-dim);
+    }
+    .role-section .rs-body {
+      color: var(--fg);
+      font-size: 14px;
+      line-height: 1.7;
+      margin: 0 0 12px;
+      max-width: var(--measure);
+      font-weight: 300;
+    }
+    .role-section .rs-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .role-section .rs-tech span {
+      font-size: 11px;
+      color: var(--cyan);
+      padding: 2px 8px;
+      background: rgba(125, 229, 255, 0.05);
+      border: 1px solid var(--border-strong);
+    }
+
+    .role-stack-block {
+      margin: 40px 0;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .role-stack-block .label {
+      color: var(--fg-dim);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .role-stack-block .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .role-stack-block .tags span {
+      font-size: 12px;
+      color: var(--phosphor);
+      padding: 3px 10px;
+      background: rgba(77, 255, 176, 0.05);
+      border: 1px solid var(--border-strong);
+    }
+
+    .role-media {
+      margin: 40px 0;
+    }
+    .role-media .label {
+      color: var(--fg-dim);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .role-media .placeholder {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .role-media .placeholder .box {
+      aspect-ratio: 16 / 10;
+      background: var(--bg-panel);
+      border: 1px dashed var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--fg-dim);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+    }
+    .role-media .placeholder .box::before {
+      content: "[ media ]";
+    }
+    /* real media grid — populated from ROLES[id].media */
+    .role-media .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .role-media .media-item {
+      position: relative;
+      display: block;
+      aspect-ratio: 16 / 10;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-strong);
+      overflow: hidden;
+      cursor: zoom-in;
+      transition: border-color 220ms ease, transform 220ms ease;
+    }
+    .role-media .media-item:hover {
+      border-color: var(--phosphor);
+      transform: translateY(-2px);
+    }
+    .role-media .media-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .role-media .media-caption {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 8px 12px;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.85) 60%);
+      color: var(--fg);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+    .role-media .media-item:hover .media-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .role-media.hidden { display: none; }
+
+    /* ---- asset load failures — terminal-style, never a broken-image glyph ---- */
+    .role-logo.logo-failed {
+      height: auto;
+      padding: 0;
+    }
+    .logo-error,
+    .media-error {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+    .le-tag,
+    .me-tag {
+      color: var(--danger);
+      border: 1px solid rgba(255, 77, 94, 0.4);
+      padding: 1px 6px;
+    }
+    .le-path,
+    .me-path {
+      color: var(--fg-dim);
+    }
+    .media-item.media-failed {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-style: dashed;
+      border-color: rgba(255, 77, 94, 0.3);
+      background:
+        repeating-linear-gradient(45deg,
+          rgba(255, 77, 94, 0.03) 0 10px,
+          transparent 10px 20px),
+        var(--bg-panel);
+      cursor: not-allowed;
+    }
+    .media-item.media-failed:hover {
+      transform: none;
+      border-color: rgba(255, 77, 94, 0.45);
+    }
+    .media-item.media-failed .media-caption {
+      opacity: 1;
+      transform: none;
+      background: none;
+      color: var(--fg-dim);
+    }
+
+    /* projects */
+/* ============ DIGITAL RAIN (landing background) ============ */
+    #rain {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.75;
+    }
+    .landing-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============ COMMAND BAR ============ */
+    #cmd-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(860px, 94vw);
+      z-index: 200;
+      background: var(--bg-panel);
+      border: 1px solid var(--phosphor);
+      box-shadow:
+        0 0 40px rgba(77, 255, 176, 0.18),
+        0 20px 60px rgba(0, 0, 0, 0.5);
+      font-family: var(--mono);
+      font-size: 13px;
+      animation: cmdBarIn 220ms ease;
+    }
+    @keyframes cmdBarIn {
+      from { transform: translateX(-50%) translateY(24px); opacity: 0; }
+      to   { transform: translateX(-50%) translateY(0);    opacity: 1; }
+    }
+    .cmd-bar-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .cmd-bar-user {
+      color: var(--phosphor);
+      font-weight: 500;
+    }
+    .cmd-bar-colon {
+      color: var(--fg-dim);
+      margin: 0 -2px;
+    }
+    .cmd-bar-path {
+      color: var(--cyan);
+      font-weight: 500;
+    }
+    .cmd-bar-dollar {
+      color: var(--fg);
+      font-weight: 700;
+      margin-right: 6px;
+      margin-left: 2px;
+    }
+    #cmd-bar-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--fg);
+      font-family: inherit;
+      font-size: inherit;
+      caret-color: var(--signature);
+    }
+    #cmd-bar-input::placeholder { color: var(--fg-dim); }
+    .cmd-bar-esc {
+      font-size: 10px;
+      color: var(--fg-dim);
+      border: 1px solid var(--border-strong);
+      padding: 2px 6px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    #cmd-bar-output {
+      padding: 10px 16px 14px;
+      font-size: 12px;
+      color: var(--fg-muted);
+      max-height: 220px;
+      overflow-y: auto;
+      line-height: 1.7;
+    }
+    #cmd-bar-output:empty { display: none; }
+
+    /* tab-completion menu — candidates listed, current one highlighted */
+    #cmd-bar-output .cmd-menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px 6px;
+      padding-top: 4px;
+    }
+    #cmd-bar-output .cmd-menu-item {
+      color: var(--fg-dim);
+      padding: 0 6px;
+      border: 1px solid transparent;
+    }
+    #cmd-bar-output .cmd-menu-item.active {
+      color: var(--phosphor);
+      border-color: var(--phosphor-dim);
+      background: rgba(77, 255, 176, 0.08);
+    }
+    #cmd-bar-output .cmd-menu-hint {
+      color: var(--fg-dim);
+      opacity: 0.6;
+      margin-left: 8px;
+      font-size: 11px;
+      align-self: center;
+    }
+    #cmd-bar-output .line { padding: 1px 0; }
+    #cmd-bar-output .line.err { color: var(--danger); }
+    #cmd-bar-output .line.ok { color: var(--phosphor); }
+    #cmd-bar-output .line.echo { color: var(--fg-dim); }
+    #cmd-bar-output .line.echo .arrow { color: var(--phosphor); }
+
+    /* help table formatting: `name  -  description` with colors */
+    #cmd-bar-output .cmd-name {
+      color: var(--phosphor);
+      font-weight: 500;
+      white-space: pre;
+    }
+    #cmd-bar-output .cmd-sep {
+      color: var(--fg-dim);
+      margin: 0 8px 0 4px;
+    }
+    #cmd-bar-output .cmd-desc {
+      color: var(--fg-muted);
+    }
+
+    /* single-character glitch: applied to the one swapped char in
+       "Reverse Engineer" during a stutter. inline-block so we can
+       transform-jitter it; intensity variants vary the RGB offset. */
+    .glitch-char {
+      color: var(--fg);
+      display: inline-block;
+      vertical-align: baseline;
+      line-height: inherit;
+    }
+    .glitch-char.tight {
+      text-shadow:
+        -0.05em 0 var(--danger),
+         0.05em 0 var(--cyan);
+    }
+    .glitch-char.mid {
+      text-shadow:
+        -0.10em 0 var(--danger),
+         0.10em 0 var(--cyan);
+    }
+    .glitch-char.wide {
+      text-shadow:
+        -0.16em 0 var(--danger),
+         0.16em 0 var(--cyan);
+    }
+
+    /* ============ KEY HINT TOAST ============ */
+    .key-hint {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-panel);
+      border: 1px solid var(--border-strong);
+      padding: 10px 18px;
+      font-size: 12px;
+      color: var(--fg-muted);
+      z-index: 150;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 300ms ease, transform 300ms ease;
+      pointer-events: none;
+    }
+    .key-hint.show {
+      opacity: 1;
+    }
+    .key-hint kbd {
+      display: inline-block;
+      padding: 1px 6px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 2px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--phosphor);
+      margin-right: 2px;
+    }
+
+    /* ============ ACTIVE WORKSPACE PULSE ============ */
+    @keyframes wsGlow {
+      0%, 100% { box-shadow: 0 0 0 rgba(77, 255, 176, 0); }
+      50%      { box-shadow: 0 0 14px rgba(77, 255, 176, 0.35); }
+    }
+    .workspaces a.active {
+      animation: wsGlow 3s ease-in-out infinite;
+    }
+
+
+    .view {
+      display: none;
+    }
+    .view.active {
+      display: block;
+      animation: glitch-in 500ms ease forwards;
+    }
+
+    .view-header {
+      padding: 32px 0 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 36px;
+    }
+    .view-header .prompt {
+      color: var(--phosphor);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .view-header .prompt .cmd { color: var(--fg); }
+    .view-header h2 {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 700;
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
+    }
+    .view-header .subtitle {
+      color: var(--fg-muted);
+      font-size: 14px;
+      margin: 0;
+    }
+    .view-header .subtitle .sig { color: var(--signature); }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--phosphor);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 0;
+      margin-top: 40px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.02em;
+      transition: transform 180ms ease;
+    }
+    .back-link:hover {
+      transform: translateX(-4px);
+    }
+    .back-link .arrow {
+      color: var(--phosphor);
+      transition: transform 180ms ease;
+    }
+    .back-link:hover .arrow {
+      transform: translateX(-4px);
+    }
+    /* keyboard shortcut hint — the only "box" is a tight kbd-style tag */
+    .back-link::after {
+      content: "esc";
+      font-size: 10px;
+      color: var(--fg-dim);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-left: 4px;
+      transition: color 180ms ease, border-color 180ms ease;
+    }
+    .back-link:hover::after {
+      color: var(--phosphor);
+      border-color: var(--phosphor-dim);
+    }
+
+    /* ============ AUTH PROMPT ============ */
+    .auth {
+      max-width: 620px;
+    }
+    .auth-body {
+      padding: 20px 22px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-strong);
+    }
+    .auth-body .line {
+      color: var(--fg-muted);
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .auth-body .line .accent { color: var(--phosphor); }
+    .auth-body .line.spaced { margin-top: 12px; }
+
+    .auth-form {
+      display: flex;
+      align-items: stretch;
+      margin-top: 18px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: border-color 120ms ease;
+    }
+    .auth-form:focus-within {
+      border-color: var(--phosphor);
+    }
+    .auth-form.shake { animation: shake 380ms ease; }
+    .auth-form .p {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: var(--phosphor);
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .auth-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 14px;
+      padding: 12px 4px;
+      outline: none;
+      caret-color: var(--phosphor);
+    }
+    .auth-input:not(:placeholder-shown) {
+      caret-color: var(--signature);
+    }
+    .auth-submit {
+      padding: 0 18px;
+      background: transparent;
+      border: none;
+      border-left: 1px solid var(--border-strong);
+      color: var(--phosphor);
+      font-family: inherit;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+    }
+    .auth-submit:hover {
+      background: var(--phosphor);
+      color: var(--bg);
+    }
+
+    .auth-status {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--fg-dim);
+      min-height: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .auth-status .err { color: var(--danger); }
+    .auth-status .ok { color: var(--phosphor); }
+    .auth-status .attempts { color: var(--fg-dim); }
+
+    .auth-hint-block {
+      margin-top: 20px;
+      padding: 14px 16px;
+      background: rgba(255, 184, 0, 0.03);
+      border: 1px dashed rgba(255, 184, 0, 0.4);
+      font-size: 12px;
+      color: var(--fg-muted);
+      line-height: 1.7;
+      display: none;
+    }
+    .auth-hint-block.show {
+      display: block;
+      animation: glitch-in 400ms ease;
+    }
+    .auth-hint-block .h {
+      color: var(--warning);
+      font-weight: 500;
+      margin-bottom: 6px;
+      letter-spacing: 0.05em;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .auth-hint-block code {
+      color: var(--phosphor);
+      background: var(--bg);
+      padding: 1px 6px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .auth-hint-block .fine {
+      color: var(--fg-dim);
+      font-size: 11px;
+      margin-top: 8px;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    /* ============ WORKSPACE LOCK ICON ============ */
+    .workspaces a .lock {
+      color: var(--warning);
+      margin-left: 6px;
+      font-size: 10px;
+    }
+    .workspaces a.unlocked .lock { display: none; }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      .status-bar .item:not(:last-child),
+      .status-bar .sep {
+        display: none;
+      }
+    }
+    @media (max-width: 640px) {
+      .terminal-window { padding: 0 16px 80px; }
+      .role-card {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .role-card .time { padding-top: 0; }
+      .workspaces a { padding: 3px 8px; font-size: 11px; }
+      .hero .meta {
+        grid-template-columns: 1fr;
+      }
+      .hero .meta .k::after {
+        content: ":";
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .cursor { animation: none; opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ LANDING ============ -->
+  <main id="landing" class="screen active" role="main">
+    <canvas id="rain" aria-hidden="true"></canvas>
+    <div class="landing-inner">
+      <div class="brand" aria-label="ExitZero">
+        <span class="exit">Exit</span><span class="zero">Zero</span>
+      </div>
+      <p class="tagline">
+        <span class="tagline-text">Success is leaving no trace</span><span class="signature">.</span>
+      </p>
+      <button class="initialize" id="init-btn" type="button" aria-label="Enter portfolio">
+        <span>&gt; ./initialize</span>
+        <span class="cursor" aria-hidden="true"></span>
+        <span class="hint">press enter</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- ============ TRANSITION ============ -->
+  <div id="transition" class="screen" aria-hidden="true">
+    <pre class="boot-log" id="boot-log"></pre>
+  </div>
+
+  <!-- ============ PORTFOLIO ============ -->
+  <div id="portfolio" class="screen" aria-hidden="true">
+    <div class="terminal-window">
+
+      <div class="window-chrome" role="banner">
+        <nav class="workspaces" aria-label="Portfolio sections">
+          <a href="#" data-view="main"><span class="num">1</span>main</a>
+          <a href="#" data-view="experience"><span class="num">2</span>experience</a>
+          <a href="#" data-view="projects"><span class="num">3</span>projects</a>
+        </nav>
+        <div class="status-bar" aria-hidden="true">
+          <span class="item"><span class="indicator" id="net-indicator"></span><span class="v" id="net-status">online</span></span>
+          <span class="sep">|</span>
+          <span class="item"><span class="k">tty</span><span class="v">1</span></span>
+          <span class="sep">|</span>
+          <span class="item"><span class="k">pid</span><span class="v">1337</span></span>
+          <span class="sep">|</span>
+          <span class="item"><span class="k">up</span><span class="v" id="uptime">0m 0s</span></span>
+          <span class="sep">|</span>
+          <span class="item"><span class="k">load</span><span class="v" id="load-avg">0.42</span></span>
+          <span class="sep">|</span>
+          <span class="item">↑<span class="v" id="net-tx">0B</span> ↓<span class="v" id="net-rx">0B</span></span>
+          <span class="sep">|</span>
+          <span class="item"><span class="v" id="clock">--:--:--</span></span>
+        </div>
+      </div>
+
+      <!-- ================= VIEW: MAIN ================= -->
+      <div class="view active" id="view-main">
+
+      <!-- Hero -->
+      <header class="hero reveal" id="about">
+        <div class="prompt">&gt; <span class="cmd">whoami</span></div>
+        <h1>Rey Dela Cruz<span class="cursor" aria-hidden="true"></span></h1>
+        <p class="role">
+          <span class="syn-type">std::string</span>
+          <span class="syn-var">title</span>
+          <span class="syn-op">=</span>
+          <span class="syn-str">"Aerospace Software Engineer"</span><span class="syn-punct">;</span>
+          <span class="syn-comment">// <span data-glitch="subtle">Reverse Engineer</span></span>
+        </p>
+        <dl class="meta">
+          <dt class="k">location</dt>
+          <dd class="v">Tauranga, New Zealand</dd>
+          <dt class="k">refs</dt>
+          <dd class="v"><span class="redacted-inline">available on request</span></dd>
+          <dt class="k">focus</dt>
+          <dd class="v">
+            <span class="tag">multi-domain autonomous systems</span>
+            <span class="tag">air · land · sea · subsurface</span>
+          </dd>
+          <dt class="k">status</dt>
+          <dd class="v">awake &nbsp;·&nbsp; authenticated &nbsp;·&nbsp; nominal</dd>
+        </dl>
+      </header>
+
+      <!-- About -->
+      <section class="block about reveal">
+        <div class="cmd-header">
+          <span class="glyph">&gt;</span>
+          <span class="name">cat about.md</span>
+          <span class="comment"># origin story</span>
+        </div>
+        <p>
+          <span class="accent">exit 0</span> — no error, no exception, no story. Just success. I write
+          software for <span class="accent">multi-domain autonomous vehicles</span> — air, land,
+          sea, and subsurface — where that's the entire job. Real-time control, fault handling, code
+          that gets one attempt with nobody standing by to catch it. I don't aim for exit zero.
+          I remove the alternatives.
+        </p>
+        <p>
+          Zero is also what I leave behind. I take systems apart to understand how they were built —
+          firmware, protocols, <span class="cyan">stripped binaries</span> — and the rule is the same
+          either way: get in, learn what I came for, leave nothing behind.
+          Exit. Zero<span class="sig">.</span>
+        </p>
+      </section>
+
+      <!-- Skills -->
+      <section class="block reveal" id="skills">
+        <div class="cmd-header">
+          <span class="glyph">&gt;</span>
+          <span class="name">cat skills.json</span>
+          <span class="comment"># the stack</span>
+        </div>
+        <div class="skills-grid">
+          <div class="cat">languages</div>
+          <div class="list">C++<span class="comma">, </span>C<span class="comma">, </span>Python<span class="comma">, </span>Bash</div>
+
+          <div class="cat">aerospace</div>
+          <div class="list">flight software<span class="comma">, </span>avionics firmware<span class="comma">, </span>real-time systems<span class="comma">, </span>STM32<span class="comma">, </span>ESP32</div>
+
+          <div class="cat">networking</div>
+          <div class="list">TCP<span class="comma">, </span>UDP<span class="comma">, </span>IP<span class="comma">, </span>REST<span class="comma">, </span>sockets<span class="comma">, </span>live telemetry infrastructure</div>
+
+          <div class="cat">graphics</div>
+          <div class="list">ImGui<span class="comma">, </span>Vulkan<span class="comma">, </span>Flutter</div>
+
+          <div class="cat">data</div>
+          <div class="list">NumPy<span class="comma">, </span>Pandas<span class="comma">, </span>YOLO<span class="comma">, </span>convolutional &amp; transformer architectures</div>
+
+          <div class="cat">hardware</div>
+          <div class="list">Altium (PCB design)<span class="comma">, </span>SolidWorks (CAD)<span class="comma">, </span>sensor prototyping</div>
+
+          <div class="cat">systems</div>
+          <div class="list">Linux (Pop!_OS)<span class="comma">, </span>POSIX<span class="comma">, </span>Git (GitHub, GitLab)<span class="comma">, </span>CMake</div>
+
+          <div class="cat">practices</div>
+          <div class="list">safety-critical dev<span class="comma">, </span>fault-handling<span class="comma">, </span>Google style guides<span class="comma">, </span>deterministic design</div>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section class="block reveal" id="contact">
+        <div class="cmd-header">
+          <span class="glyph">&gt;</span>
+          <span class="name">./contact --secure</span>
+          <span class="comment"># reach out</span>
+        </div>
+        <div class="contact">
+          <div class="k">email</div>
+          <div class="v"><a href="mailto:rey@exitzero.cc">rey@exitzero.cc</a></div>
+
+          <div class="k">github</div>
+          <div class="v"><a href="https://github.com/ExitZ3ro" target="_blank" rel="noopener">github.com/ExitZ3ro</a></div>
+
+          <div class="k">linkedin</div>
+          <div class="v"><a href="https://www.linkedin.com/in/rey-dela-cruz-6678aa244/" target="_blank" rel="noopener">linkedin.com/in/rey-dela-cruz…</a></div>
+
+          <div class="k">pgp</div>
+          <div class="v"><a href="#404" data-view="404" rel="noopener">public key</a></div>
+        </div>
+      </section>
+
+      </div>
+      <!-- ================= /VIEW: MAIN ================= -->
+
+
+            <!-- ================= VIEW: EXPERIENCE ================= -->
+      <div class="view" id="view-experience" hidden>
+        <div class="view-header">
+          <div class="prompt">&gt; <span class="cmd">cd ~/experience/ &amp;&amp; ls -la</span></div>
+          <h2>Experience</h2>
+          <p class="subtitle">3 artifacts found &nbsp;·&nbsp; select a record to begin analysis</p>
+        </div>
+
+        <div id="role-list"><!-- rendered from ROLES --></div>
+
+        <button type="button" class="back-link" data-view="main"><span class="arrow">←</span> cd ..</button>
+      </div>
+      <!-- ================= /VIEW: EXPERIENCE ================= -->
+
+
+      <!-- ================= VIEW: ROLE DETAIL (case study) ================= -->
+      <div class="view" id="view-detail" hidden>
+        <div class="role-detail-header">
+          <div class="prompt">&gt; <span class="cmd">cat ~/experience/<span id="detail-slug">record</span>.md</span></div>
+          <div class="role-title-block">
+            <div class="role-title-text">
+              <h2 id="detail-title">Role</h2>
+              <p class="company-line">
+                <span id="detail-company"></span>
+                <span class="sep">·</span>
+                <span class="period" id="detail-period"></span>
+                <span id="detail-active-tag"></span>
+              </p>
+            </div>
+            <div id="detail-logo" class="role-logo" hidden></div>
+          </div>
+        </div>
+
+        <!-- surveillance-style video feed (autoplay muted loop) -->
+        <div class="role-feed" id="detail-feed" hidden>
+          <div class="feed-chrome">
+            <div class="feed-left">
+              <span class="feed-status-dot"></span>
+              <span class="feed-label">// archive feed</span>
+            </div>
+            <div class="feed-right">
+              <span class="feed-rec">▶ PLAYBACK</span>
+              <span class="feed-time" id="feed-time">FRAME 000000</span>
+            </div>
+          </div>
+          <div class="feed-viewport">
+            <video id="detail-video" autoplay loop muted playsinline preload="metadata"></video>
+            <div class="feed-scanlines"></div>
+            <div class="feed-vignette"></div>
+            <div class="feed-corners"></div>
+            <div class="feed-missing" id="feed-missing">
+              <div class="feed-missing-label">// NO SIGNAL</div>
+              <div class="feed-missing-hint">missing asset &nbsp;·&nbsp; <code>footage archive pending</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="role-meta-grid">
+          <div class="k" id="detail-location-k">location</div>
+          <div class="v" id="detail-location"></div>
+          <div class="k" id="detail-status-k">status</div>
+          <div class="v" id="detail-status"></div>
+        </div>
+
+        <div class="role-project-box">
+          <div class="label">// the project</div>
+          <h3 class="name" id="detail-project-name"></h3>
+          <p class="desc" id="detail-project-desc"></p>
+        </div>
+
+        <div id="detail-sections">
+          <!-- populated by JS -->
+        </div>
+
+        <div class="role-stack-block">
+          <div class="label">// full stack</div>
+          <div class="tags" id="detail-stack"></div>
+        </div>
+
+        <div class="role-media" id="detail-media">
+          <div class="label">// supplementary media (coming soon)</div>
+          <div class="placeholder">
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+          </div>
+        </div>
+
+        <button type="button" class="back-link" data-view="experience"><span class="arrow">←</span> cd ..</button>
+      </div>
+      <!-- ================= /VIEW: ROLE DETAIL ================= -->
+
+
+      <!-- ================= VIEW: AUTH (password gate) ================= -->
+      <!--
+        ┌─────────────────────────────────────────────────────────────┐
+        │  Hint 1: 6 chars, lowercase.                                │
+        │  Hint 2: legendary underground hacker zine, est. 1985.      │
+        │  Hint 3: the key is the answer to life, the universe, and   │
+        │          everything.                                        │
+        │  Hint 4: verify(input[i] ^ KEY) === CIPHER[i]  for all i    │
+        │                                                             │
+        │  Everything you need is in this file. gg wp.                │
+        └─────────────────────────────────────────────────────────────┘
+      -->
+      <div class="view" id="view-auth" hidden>
+        <div class="view-header">
+          <div class="prompt">&gt; <span class="cmd">sudo ./access ~/projects/</span></div>
+          <h2>Authentication required</h2>
+          <p class="subtitle"><span style="color: var(--fg-dim);">drwx------</span> &nbsp; root &nbsp; root &nbsp; projects/</p>
+        </div>
+
+        <div class="auth">
+          <div class="auth-body">
+            <div class="line">&gt; <span class="accent">whoami</span></div>
+            <div class="line" style="color: var(--fg-dim);">rey</div>
+            <div class="line spaced">&gt; <span class="accent">./access</span></div>
+            <div class="line" style="color: var(--danger);">[EACCES] permission denied &mdash; root required.</div>
+            <div class="line spaced" style="color: var(--fg-dim);"># the key ships with the lock.</div>
+
+            <form class="auth-form" id="auth-form" autocomplete="off">
+              <span class="p">$</span>
+              <input
+                type="text"
+                class="auth-input"
+                id="auth-input"
+                placeholder="enter password"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                aria-label="password"
+              />
+              <button type="submit" class="auth-submit">SUBMIT</button>
+            </form>
+
+            <div class="auth-status">
+              <span id="auth-msg"></span>
+              <span class="attempts">attempts: <span id="auth-attempts">0</span></span>
+            </div>
+
+            <div class="auth-hint-block" id="auth-hint-block">
+              <div class="h">// need a nudge?</div>
+              <div>
+                The directory is locked with a classic <code>XOR</code> cipher. The <code>CIPHER</code> bytes
+                and <code>KEY</code> are defined in this file's JavaScript — go read them.
+              </div>
+              <div style="margin-top:8px;">
+                Reverse the operation: <code>input[i] = CIPHER[i] ^ KEY</code>.
+              </div>
+              <div class="fine">
+                (More hints in the HTML comments above this form. View source.)
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="back-link" data-view="main"><span class="arrow">←</span> cd ..</button>
+        </div>
+      </div>
+      <!-- ================= /VIEW: AUTH ================= -->
+
+
+      <!-- ================= VIEW: CLASSIFIED (unlocked RE vault) ================= -->
+      <div class="view" id="view-classified" hidden>
+        <div class="view-header">
+          <div class="prompt">&gt; <span class="cmd">./decrypt ~/projects/classified/ &amp;&amp; ls</span></div>
+          <h2>Reverse Engineering Vault</h2>
+          <p class="subtitle">Access granted, operator<span class="sig">.</span> Welcome to the good stuff.</p>
+        </div>
+
+        <div class="proj-list" id="classified-list">
+          <!-- rendered from CLASSIFIED -->
+        </div>
+
+        <button type="button" class="back-link" data-view="projects"><span class="arrow">←</span> cd ..</button>
+      </div>
+      <!-- ================= /VIEW: CLASSIFIED ================= -->
+
+
+      <!-- ================= VIEW: PROJECTS (open list) ================= -->
+      <div class="view" id="view-projects" hidden>
+        <div class="view-header">
+          <div class="prompt">&gt; <span class="cmd">cd ~/projects/ &amp;&amp; ls -la</span></div>
+          <h2>Projects</h2>
+          <p class="subtitle">things I build when nobody is paying me to</p>
+        </div>
+
+        <!--
+          #####################################################
+          #  one entry below is XOR-locked.                   #
+          #  key and cipher are both in this file.            #
+          #  hints: 6 chars · lowercase · legendary zine 1985 #
+          #####################################################
+        -->
+
+        <div class="proj-list" id="proj-list">
+          <!-- open entries rendered from PROJECTS; the locked one is fixed -->
+
+          <!-- the one locked entry -->
+          <button type="button" class="proj-card locked" data-view="classified"
+                  aria-label="Classified directory — authentication required">
+            <div class="proj-perm" id="classified-perm">drwx------</div>
+            <div class="proj-body">
+              <h3><span data-glitch="subtle">classified</span><span class="proj-tag danger">restricted</span></h3>
+              <p>Reverse engineering. Firmware teardowns. CTF writeups. Protocol archaeology.
+                 Owned by root — the contents don't list.</p>
+              <div class="proj-stack"><span>???</span><span>???</span><span>???</span></div>
+            </div>
+            <div class="proj-arrow">→</div>
+          </button>
+        </div>
+
+        <button type="button" class="back-link" data-view="main"><span class="arrow">←</span> cd ..</button>
+      </div>
+      <!-- ================= /VIEW: PROJECTS ================= -->
+
+
+      <!-- ================= VIEW: 404 (SEGFAULT core dump) ================= -->
+      <div class="view" id="view-404" hidden>
+        <div class="segfault">
+          <div class="segfault-tag">[SEGFAULT]</div>
+          <h2 class="segfault-title">core dumped</h2>
+          <p class="segfault-sub" id="sf-sub"></p>
+          <div class="segfault-trace" id="sf-trace"></div>
+          <div class="segfault-fault" id="sf-fault"></div>
+          <div class="segfault-code" id="sf-code"></div>
+          <div class="segfault-exit">
+            <span class="tk">exit</span> <span class="ec">139</span> &nbsp;·&nbsp; stack trace omitted
+          </div>
+          <button type="button" class="back-link" data-view="main"><span class="arrow">←</span> return to /</button>
+        </div>
+      </div>
+      <!-- ================= /VIEW: 404 ================= -->
+
+      <footer class="footer">
+        <div>ExitZero &copy; <span id="year"></span> Rey Dela Cruz</div>
+        <div class="kernel-line">kernel: exitzero-1.0.0 · linux-x86_64</div>
+        <div>return <span class="sig">0</span>;</div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- ============ COMMAND BAR ============ -->
+  <div id="cmd-bar" role="dialog" aria-label="Command bar" hidden>
+    <div id="cmd-bar-output" role="log" aria-live="polite"></div>
+    <div class="cmd-bar-header">
+      <span class="cmd-bar-user">rey@exitzero</span><span class="cmd-bar-colon">:</span><span class="cmd-bar-path" id="cmd-bar-path">~</span><span class="cmd-bar-dollar">$</span>
+      <input
+        id="cmd-bar-input"
+        type="text"
+        placeholder="type a command... try 'help'"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="command input"
+      />
+      <span class="cmd-bar-esc">esc</span>
+    </div>
+  </div>
+
+  <!-- ============ KEY HINT TOAST ============ -->
+  <div id="key-hint" class="key-hint" hidden>
+    <kbd>/</kbd> command · <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> workspaces · <kbd>?</kbd> help
+  </div>
+
+  <!-- ============================================================
+       CONTENT REGISTRY
+
+       Each entry under content/ registers itself on load. To add one:
+         1. copy content/_TEMPLATE.<kind>.js
+         2. fill it in, save it under the matching folder
+         3. add a <script src> line below
+
+       Order here is order on the page. Classic <script src> is used
+       deliberately over ES modules so the site still opens straight from
+       the filesystem with no server.
+       ============================================================ -->
+  <script>
+    window.EXITZERO = {
+      // NB: storage keys and method names must not collide — `classified`
+      // as both would have the method overwrite the array.
+      roles: {}, projects: [], classifiedEntries: [],
+      role:       function (id, o) { this.roles[id] = o; },
+      project:    function (o)     { this.projects.push(o); },
+      classified: function (o)     { this.classifiedEntries.push(o); },
+    };
+  </script>
+
+  <!-- experience -->
+  <script src="content/experience/syos-aerospace.js"></script>
+  <script src="content/experience/kea-aerospace.js"></script>
+  <script src="content/experience/agresearch.js"></script>
+
+  <!-- projects -->
+  <script src="content/projects/project-aether.js"></script>
+  <script src="content/projects/project-soteria.js"></script>
+  <script src="content/projects/discord-task-bot.js"></script>
+
+  <!-- classified -->
+  <script src="content/classified/firmware-archaeology.js"></script>
+  <script src="content/classified/ctf-writeups.js"></script>
+  <script src="content/classified/protocol-re.js"></script>
+  <script src="content/classified/crackmes.js"></script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const landing     = document.getElementById('landing');
+      const transition  = document.getElementById('transition');
+      const portfolio   = document.getElementById('portfolio');
+      const initBtn     = document.getElementById('init-btn');
+      const bootLog     = document.getElementById('boot-log');
+      const yearEl      = document.getElementById('year');
+      const wsLinks     = document.querySelectorAll('.workspaces a');
+      const views       = {
+        main:       document.getElementById('view-main'),
+        experience: document.getElementById('view-experience'),
+        detail:     document.getElementById('view-detail'),
+        auth:       document.getElementById('view-auth'),
+        projects:   document.getElementById('view-projects'),
+        classified: document.getElementById('view-classified'),
+        '404':      document.getElementById('view-404'),
+      };
+      // which workspace tab lights up for a given view
+      const WS_GROUP = {
+        experience: 'experience', detail:     'experience',
+        projects:   'projects',   auth:       'projects',   classified: 'projects',
+      };
+
+      yearEl.textContent = new Date().getFullYear();
+
+      // boot sequences (per view)
+      const BOOTS = {
+        initial: [
+          { text: '> ./initialize',                                          color: 'accent', delay: 40 },
+          { text: '[  OK  ] mounting /dev/null                              ', color: 'ok',     delay: 90 },
+          { text: '[  OK  ] establishing secure channel [tls-1.3]           ', color: 'ok',     delay: 110 },
+          { text: '[  OK  ] verifying signature (ed25519)                    ', color: 'ok',     delay: 100 },
+          { text: '[  OK  ] loading kernel modules                           ', color: 'ok',     delay: 120 },
+          { text: '[ WARN ] no trace expected                                ', color: 'warn',  delay: 90 },
+          { text: '[  OK  ] rendering portfolio                              ', color: 'ok',     delay: 110 },
+          { text: '[ INFO ] shortcuts: / cmd  ·  1-3 workspaces  ·  ? help', color: 'accent', delay: 130 },
+          { text: '[  OK  ] exit code 0',                                       color: 'ok',     delay: 130 },
+          { text: '',                                                           color: 'sig',    delay: 100 },
+          // --- login banner (remove these three lines to drop it) ---
+          { text: 'Project ExitZero 1.0.0',                                     color: 'banner', delay: 100 },
+          { text: '',                                                           color: 'sig',    delay: 420 },
+          { text: 'login: ',                                                    color: 'accent', delay: 200, typewrite: 'rey_dela_cruz' },
+          { text: 'password: ',                                                 color: 'accent', delay: 0,   typewrite: '****************', extraDelay: 0 },
+        ],
+        main: [
+          { text: '> cd ~/',                                                   color: 'accent', delay: 40 },
+          { text: '[  OK  ] returning to home directory                       ', color: 'ok',     delay: 100 },
+          { text: '[  OK  ] restoring state                                  ', color: 'ok',     delay: 90 },
+          { text: '> _',                                                        color: 'sig',    delay: 150 },
+        ],
+        experience: [
+          { text: '> cd ~/experience/',                                  color: 'accent', delay: 40 },
+          { text: '[  OK  ] verifying clearance                               ', color: 'ok',     delay: 100 },
+          { text: '[  OK  ] mounting secure volume                            ', color: 'ok',     delay: 110 },
+          { text: '[  OK  ] loading archive                                   ', color: 'ok',     delay: 90 },
+          { text: '> _',                                                        color: 'sig',    delay: 150 },
+        ],
+        detail: [
+          { text: '> cat ~/experience/<record>.md',                      color: 'accent', delay: 40 },
+          { text: '[  OK  ] opening record                                    ', color: 'ok',     delay: 100 },
+          { text: '[  OK  ] parsing frontmatter                               ', color: 'ok',     delay: 90 },
+          { text: '[  OK  ] loading attachments                               ', color: 'ok',     delay: 110 },
+          { text: '> _',                                                        color: 'sig',    delay: 150 },
+        ],
+        auth: [
+          { text: '> cd ~/projects/',                                    color: 'accent', delay: 40 },
+          { text: '[ WARN ] restricted directory                              ', color: 'warn',  delay: 100 },
+          { text: '[  OK  ] loading auth challenge                            ', color: 'ok',     delay: 110 },
+          { text: '[  ??  ] awaiting input                                    ', color: 'warn',  delay: 90 },
+          { text: '> _',                                                        color: 'sig',    delay: 150 },
+        ],
+        projects: [
+          { text: '> cd ~/projects/',                                    color: 'accent', delay: 40 },
+          { text: '[  OK  ] enumerating directory                             ', color: 'ok',     delay: 100 },
+          { text: '[  OK  ] reading permissions                               ', color: 'ok',     delay: 100 },
+          { text: '[ WARN ] 1 entry not readable                              ', color: 'warn',  delay: 110 },
+          { text: '> _',                                                        color: 'sig',    delay: 150 },
+        ],
+        classified: [
+          { text: '> ./verify --key <redacted>',                               color: 'accent', delay: 40 },
+          { text: '[  OK  ] signature verified                                ', color: 'ok',     delay: 100 },
+          { text: '[  OK  ] decrypting vault                                  ', color: 'ok',     delay: 110 },
+          { text: '[  OK  ] mounting /projects                                ', color: 'ok',     delay: 100 },
+          { text: '> welcome, operator.',                                        color: 'sig',    delay: 250 },
+        ],
+        // First entry into ~/projects/classified. The whole point is that it
+        // reads like every other transition on the site — [ OK ] lines
+        // ticking by — until the integrity check fails and it comes apart.
+        unlock: [
+          { text: '> ./decrypt --key <accepted>',                             color: 'accent', delay: 40 },
+          { text: '[  OK  ] signature verified                               ', color: 'ok',     delay: 100 },
+          { text: '[  OK  ] key accepted                                     ', color: 'ok',     delay: 90 },
+          { text: '[  OK  ] mounting /classified                             ', color: 'ok',     delay: 110 },
+          { text: '[  ??  ] verifying segment table                          ', color: 'warn',  delay: 260 },
+          { text: '[ FAIL ] segment 0x2a: integrity mismatch                 ', color: 'err',   delay: 150 },
+          { text: '[ WARN ] retrying (1/1)                                   ', color: 'warn',  delay: 230 },
+          { text: '[ FAIL ] segment 0x2a: integrity mismatch                 ', color: 'err',   delay: 130 },
+          { text: '[ WARN ] framebuffer: unexpected write                    ', color: 'warn',  delay: 110, mark: 'decay' },
+          { text: '!!!  display driver not responding',                        color: 'err',   delay: 90, extraDelay: 240 },
+        ],
+        '404': [
+          { text: '> fetch ~/.gnupg/pubkey.asc',                                color: 'accent', delay: 40 },
+          { text: '[  ??  ] address 0x00000000                                ', color: 'warn',  delay: 90 },
+          { text: '[ FAIL ] read failed: null pointer                         ', color: 'err',   delay: 110 },
+          { text: '!!!  segmentation fault',                                     color: 'err',   delay: 120 },
+          { text: '[FATAL] core dumped                                        ', color: 'err',   delay: 140 },
+        ],
+      };
+
+      // `onMark` fires the moment a line carrying a `mark` is printed, so a
+      // side effect can be tied to a specific line rather than to the end of
+      // the sequence.
+      function runBoot(lines, onDone, onMark) {
+        let i = 0;
+        bootLog.innerHTML = '';
+        function next() {
+          if (i >= lines.length) {
+            const lastLine = lines[lines.length - 1];
+            const finalDelay = (lastLine && lastLine.extraDelay) ? lastLine.extraDelay : 380;
+            setTimeout(onDone, finalDelay);
+            return;
+          }
+          const line = lines[i];
+          const span = document.createElement('span');
+          span.className = line.color;
+          i++;
+
+          // typewrite mode: render the static prefix instantly, then
+          // type `line.typewrite` character-by-character with variance
+          // so it feels like an actual human typing.
+          if (line.typewrite) {
+            span.innerHTML = escBootHtml(line.text) +
+              '<span class="typed"></span>' +
+              '<span class="boot-cursor"></span>\n';
+            bootLog.appendChild(span);
+            const typedEl = span.querySelector('.typed');
+            typewriteChars(typedEl, line.typewrite, () => {
+              // if there's another line queued, remove this line's cursor
+              // so we don't end up with two blinking cursors on screen at once
+              if (i < lines.length) {
+                const cursor = span.querySelector('.boot-cursor');
+                if (cursor) cursor.remove();
+              }
+              setTimeout(next, line.delay || 0);
+            });
+            return;
+          }
+
+          if (line.blink) {
+            span.innerHTML = escBootHtml(line.text) + '<span class="boot-cursor"></span>\n';
+          } else {
+            span.textContent = line.text + '\n';
+          }
+          bootLog.appendChild(span);
+          if (line.mark && onMark) onMark(line.mark);
+          setTimeout(next, line.delay);
+        }
+        next();
+      }
+      function escBootHtml(s) {
+        return String(s).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      // TYPEWRITER — appends chars one at a time with human-timing
+      // variance: base speed jitters, shifted keys (_) take longer,
+      // ~10% chance of a "thinking" pause between chars.
+      function typewriteChars(el, text, done) {
+        let i = 0;
+        function nextChar() {
+          if (i >= text.length) { done(); return; }
+          const ch = text[i];
+          const prev = i > 0 ? text[i - 1] : '';
+          el.appendChild(document.createTextNode(ch));
+          i++;
+          // base 55-110ms
+          let d = 55 + Math.random() * 55;
+          // shifted keys take noticeably longer
+          if (ch === '_' || ch === '-')     d += 80 + Math.random() * 60;
+          // slight lag getting back on rhythm after a shift
+          if (prev === '_' || prev === '-') d += 30;
+          // ~10% chance of a thinking pause
+          if (Math.random() < 0.10)         d += 160 + Math.random() * 140;
+          setTimeout(nextChar, d);
+        }
+        nextChar();
+      }
+
+      // screen + view controller
+      function showScreen(el) {
+        [landing, transition, portfolio].forEach(s => {
+          s.classList.remove('active', 'leaving');
+          s.setAttribute('aria-hidden', 'true');
+        });
+        el.classList.add('active');
+        el.setAttribute('aria-hidden', 'false');
+      }
+
+      function fadeOut(el, cb) {
+        el.classList.add('leaving');
+        setTimeout(() => {
+          el.classList.remove('active', 'leaving');
+          el.setAttribute('aria-hidden', 'true');
+          cb();
+        }, 380);
+      }
+
+      // Swap screens with no crossfade. `.screen` carries a 400ms opacity
+      // transition, which is right for normal navigation but wrong when the
+      // rain is meant to be the only transition — the fade shows black
+      // between the two screens.
+      function showScreenInstant(el) {
+        const all = [landing, transition, portfolio];
+        all.forEach(s => { s.style.transition = 'none'; });
+        showScreen(el);
+        void el.offsetHeight;                       // commit before restoring
+        all.forEach(s => { s.style.transition = ''; });
+      }
+
+      function setView(name) {
+        Object.entries(views).forEach(([n, el]) => {
+          const isActive = n === name;
+          el.classList.toggle('active', isActive);
+          if (isActive) el.removeAttribute('hidden');
+          else el.setAttribute('hidden', '');
+        });
+        // workspace tabs: each tab owns its own subtree
+        const wsGroup = WS_GROUP[name] || 'main';
+        wsLinks.forEach(a => {
+          a.classList.toggle('active', a.dataset.view === wsGroup);
+        });
+        portfolio.scrollTo({ top: 0, behavior: 'auto' });
+        updateCmdBarPath(name);
+      }
+
+      // current location in the virtual filesystem
+      let currentDetailSlug = null;
+      const VIEW_PATHS = {
+        main:       '~',
+        experience: '~/experience',
+        projects:   '~/projects',
+        auth:       '~/projects/classified',
+        classified: '~/projects/classified',
+      };
+      function updateCmdBarPath(name) {
+        const el = document.getElementById('cmd-bar-path');
+        if (!el) return;
+        let path = VIEW_PATHS[name] || '~';
+        if (name === 'detail' && currentDetailSlug) {
+          path = '~/experience/' + currentDetailSlug;
+        }
+        el.textContent = path;
+      }
+
+      function currentView() {
+        const entry = Object.entries(views).find(([, el]) => el.classList.contains('active'));
+        return entry ? entry[0] : null;
+      }
+
+      let initialized = false;
+
+      function startInitial() {
+        if (initialized) return;
+        initialized = true;
+        fadeOut(landing, () => {
+          showScreen(transition);
+          runBoot(BOOTS.initial, () => {
+            fadeOut(transition, () => {
+              showScreen(portfolio);
+              setView('main');
+            });
+          });
+        });
+      }
+
+      initBtn.addEventListener('click', startInitial);
+      document.addEventListener('keydown', (e) => {
+        if (initialized) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          startInitial();
+        }
+      });
+
+      const ROLES = EXITZERO.roles;
+
+      // PROJECTS  &  CLASSIFIED
+      //
+      // Both directories are plain data, so curating for a given audience
+      // is an edit rather than surgery:
+      //   reorder : move the entry
+      //   hide    : add `hidden: true` — keeps the content but drops it
+      //             from the page, the `ls` listing and the counts
+      //   remove  : delete the entry
+      //   add     : paste an object
+      // An empty list is valid in both.
+      const PROJECTS   = EXITZERO.projects;
+
+      const CLASSIFIED = EXITZERO.classifiedEntries;
+
+      const visible = (list) => list.filter(x => !x.hidden);
+
+      // Every entry — role, project or classified writeup — is reachable by
+      // slug and renders through the same detail template. The kind only
+      // decides which directory it lives in, not how it looks.
+      const ENTRIES = {};
+      Object.entries(ROLES).forEach(([id, r]) => { ENTRIES[r.slug] = { kind: 'role', id, data: r }; });
+      PROJECTS.forEach(p   => { ENTRIES[p.slug] = { kind: 'project',    data: p }; });
+      CLASSIFIED.forEach(p => { ENTRIES[p.slug] = { kind: 'classified', data: p }; });
+
+      // Cards come from the registry, so dropping a new file into
+      // content/experience/ and adding its <script src> is the whole job.
+      function renderRoles() {
+        const host = document.getElementById('role-list');
+        if (!host) return;
+        host.innerHTML = '';
+        Object.values(ROLES).filter(r => !r.hidden).forEach(r => {
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'role-card';
+          card.dataset.view = 'detail';
+          card.dataset.slug = r.slug;
+
+          const time = document.createElement('div');
+          time.className = 'time';
+          time.append(document.createTextNode(r.period || ''));
+          if (r.active) {
+            const tag = document.createElement('span');
+            tag.className = 'active-tag';
+            tag.textContent = 'ACTIVE';
+            time.appendChild(tag);
+          }
+
+          const body = document.createElement('div');
+          body.className = 'body';
+
+          const h3 = document.createElement('h3');
+          h3.append(document.createTextNode((r.title || r.slug) + ' '));
+          if (r.company) {
+            const co = document.createElement('span');
+            co.className = 'company-tag';
+            co.textContent = r.company;
+            h3.appendChild(co);
+          }
+
+          const sub = document.createElement('p');
+          sub.className = 'company';
+          sub.textContent = (r.card && r.card.subtitle) || '';
+
+          const blurb = document.createElement('p');
+          blurb.textContent = (r.card && r.card.desc) || '';
+
+          const hint = document.createElement('div');
+          hint.className = 'click-hint';
+          const hintText = document.createElement('span');
+          hintText.textContent = 'begin analysis';
+          const arrow = document.createElement('span');
+          arrow.className = 'arrow';
+          arrow.textContent = '\u2192';
+          hint.append(hintText, document.createTextNode(' '), arrow);
+
+          body.append(h3, sub, blurb, hint);
+          card.append(time, body);
+          host.appendChild(card);
+        });
+      }
+
+      function renderProjects() {
+        const host = document.getElementById('proj-list');
+        if (!host) return;
+        const locked = host.querySelector('.proj-card.locked');
+        visible(PROJECTS).forEach(p => {
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'proj-card';
+          card.dataset.view = 'detail';          card.dataset.slug = p.slug;
+
+          const perm = document.createElement('div');
+          perm.className = 'proj-perm';
+          perm.textContent = 'drwxr-xr-x';
+
+          const body = document.createElement('div');
+          body.className = 'proj-body';
+          const h3 = document.createElement('h3');
+          h3.textContent = p.slug;
+          const meta = p.card || {};
+          if (meta.tag) {
+            const tag = document.createElement('span');
+            tag.className = 'proj-tag';
+            tag.textContent = meta.tag;
+            h3.appendChild(tag);
+          }
+          const desc = document.createElement('p');
+          desc.textContent = meta.desc || '';
+          const stack = document.createElement('div');
+          stack.className = 'proj-stack';
+          (meta.stack || []).forEach(t => {
+            const s = document.createElement('span');
+            s.textContent = t;
+            stack.appendChild(s);
+          });
+          body.append(h3, desc, stack);
+
+          const arrow = document.createElement('div');
+          arrow.className = 'proj-arrow';
+          arrow.textContent = '\u2192';
+
+          card.append(perm, body, arrow);
+          host.insertBefore(card, locked);
+        });
+      }
+      function renderClassified() {
+        const host = document.getElementById('classified-list');
+        if (!host) return;
+        host.innerHTML = '';
+        visible(CLASSIFIED).forEach(p => {
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'proj-card';
+          card.dataset.view = 'detail';
+          card.dataset.slug = p.slug;
+
+          const perm = document.createElement('div');
+          perm.className = 'proj-perm';
+          perm.textContent = 'drwxr-xr-x';
+
+          const body = document.createElement('div');
+          body.className = 'proj-body';
+          const h3 = document.createElement('h3');
+          h3.textContent = p.slug;
+          const meta = p.card || {};
+          if (meta.tag) {
+            const tag = document.createElement('span');
+            tag.className = 'proj-tag';
+            tag.textContent = meta.tag;
+            h3.appendChild(tag);
+          }
+          const desc = document.createElement('p');
+          desc.textContent = meta.desc || '';
+          const stack = document.createElement('div');
+          stack.className = 'proj-stack';
+          (meta.stack || []).forEach(t => {
+            const s = document.createElement('span');
+            s.textContent = t;
+            stack.appendChild(s);
+          });
+          body.append(h3, desc, stack);
+
+          const arrow = document.createElement('div');
+          arrow.className = 'proj-arrow';
+          arrow.textContent = '\u2192';
+
+          card.append(perm, body, arrow);
+          host.appendChild(card);
+        });
+      }
+
+      renderRoles();
+      renderProjects();
+      renderClassified();
+
+      // Fills the detail template from any entry. A project carries fewer
+      // fields than a role, so anything absent hides its own row rather than
+      // rendering an empty label.
+      // An entry with no `page` has nothing to show. Rather than rendering
+      // an empty template, the request is treated as what it is — a path
+      // that resolves to nothing.
+      function hasPage(slug) {
+        const e = ENTRIES[slug];
+        return !!(e && e.data && e.data.page);
+      }
+
+      function populateDetail(slug) {
+        const entry = ENTRIES[slug];
+        if (!entry || !entry.data.page) return false;
+        const r = Object.assign({}, entry.data, entry.data.page);
+        currentDetailSlug = r.slug;
+
+        const set = (id, val) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = val || '';
+        };
+        const metaRow = (labelId, valueId, val) => {
+          const l = document.getElementById(labelId), v = document.getElementById(valueId);
+          if (!l || !v) return;
+          const on = !!val;
+          l.style.display = on ? '' : 'none';
+          v.style.display = on ? '' : 'none';
+          v.textContent = val || '';
+        };
+
+        set('detail-slug',  r.slug);
+        set('detail-title', r.title || r.slug);
+
+        // a role has a company; a project has its tag in that slot instead
+        const company = document.getElementById('detail-company');
+        const period  = document.getElementById('detail-period');
+        const sep     = document.querySelector('.role-detail-header .company-line .sep');
+        if (company) company.textContent = r.company || r.tag || '';
+        if (period)  period.textContent  = r.period || '';
+        if (sep)     sep.style.display   = (r.company || r.tag) && r.period ? '' : 'none';
+
+        metaRow('detail-location-k', 'detail-location', r.location);
+        metaRow('detail-status-k',   'detail-status',   r.status);
+
+        const proj = r.project || { name: r.title || r.slug, desc: r.desc || '' };
+        set('detail-project-name', proj.name);
+        set('detail-project-desc', proj.desc);
+
+        const activeTag = document.getElementById('detail-active-tag');
+        activeTag.innerHTML = r.active ? '<span class="active-tag">ACTIVE</span>' : '';
+
+        // logo — shown next to the title if provided. if the file is
+        // missing we swap in a terminal-style load error rather than
+        // letting the browser render its broken-image glyph.
+        const logoSlot = document.getElementById('detail-logo');
+        if (r.logo) {
+          logoSlot.classList.remove('logo-failed');
+          logoSlot.innerHTML = '';
+          const logoImg = document.createElement('img');
+          logoImg.alt = (r.company || r.title || r.slug) + ' logo';
+          logoImg.onerror = () => {
+            logoSlot.classList.add('logo-failed');
+            logoSlot.innerHTML =
+              '<span class="logo-error">' +
+                '<span class="le-tag">ENOENT</span>' +
+                '<span class="le-path">' + escapeHtml(r.logo.split('/').pop()) + '</span>' +
+              '</span>';
+          };
+          logoImg.src = r.logo;
+          logoSlot.appendChild(logoImg);
+          logoSlot.removeAttribute('hidden');
+        } else {
+          logoSlot.innerHTML = '';
+          logoSlot.classList.remove('logo-failed');
+          logoSlot.setAttribute('hidden', '');
+        }
+
+        // hero video feed — plays on loop if provided; on load-error we
+        // show a NO SIGNAL overlay AND flip the chrome telemetry so it
+        // doesn't lie about playback when there's no video.
+        const feed        = document.getElementById('detail-feed');
+        const feedVideo   = document.getElementById('detail-video');
+        const feedMissing = document.getElementById('feed-missing');
+        const feedLabel   = feed.querySelector('.feed-label');
+        const feedRec     = feed.querySelector('.feed-rec');
+        const feedTime    = feed.querySelector('.feed-time');
+
+        function setFeedSignal(ok) {
+          if (ok) {
+            feed.classList.remove('no-signal');
+            feedMissing.classList.remove('show');
+            feedLabel.textContent = '// archive feed';
+            feedRec.textContent = '\u25B6 PLAYBACK';
+          } else {
+            feed.classList.add('no-signal');
+            feedMissing.classList.add('show');
+            feedLabel.textContent = '// signal lost';
+            feedRec.textContent = '\u2298 NO SIGNAL';
+            feedTime.textContent = 'FRAME ------';
+          }
+        }
+
+        // reset to "playing" chrome before we know what happens
+        setFeedSignal(true);
+
+        if (r.heroVideo) {
+          feed.removeAttribute('hidden');
+          feedVideo.onerror     = () => setFeedSignal(false);
+          feedVideo.onloadeddata = () => setFeedSignal(true);
+          feedVideo.src = r.heroVideo;
+          feedVideo.load();
+          feedVideo.play().catch(() => {});
+        } else {
+          feedVideo.pause();
+          feedVideo.removeAttribute('src');
+          feed.setAttribute('hidden', '');
+        }
+
+        const sectionsHost = document.getElementById('detail-sections');
+        sectionsHost.innerHTML = '';
+        (r.sections || []).forEach(s => {
+          const wrap = document.createElement('div');
+          wrap.className = 'role-section';
+          const title = document.createElement('div');
+          title.className = 'rs-title';
+          title.textContent = s.title;
+          const body = document.createElement('p');
+          body.className = 'rs-body';
+          body.textContent = s.body;
+          wrap.appendChild(title);
+          wrap.appendChild(body);
+          if (s.tech && s.tech.length > 0) {
+            const tech = document.createElement('div');
+            tech.className = 'rs-tech';
+            s.tech.forEach(t => {
+              const tag = document.createElement('span');
+              tag.textContent = t;
+              tech.appendChild(tag);
+            });
+            wrap.appendChild(tech);
+          }
+          sectionsHost.appendChild(wrap);
+        });
+
+        const stackHost = document.getElementById('detail-stack');
+        stackHost.innerHTML = '';
+        if (r.stack && r.stack.length > 0) {
+          r.stack.forEach(t => {
+            const span = document.createElement('span');
+            span.textContent = t;
+            stackHost.appendChild(span);
+          });
+          document.querySelector('.role-stack-block').style.display = '';
+        } else {
+          document.querySelector('.role-stack-block').style.display = 'none';
+        }
+
+        // supplementary media — if the role has a `media: []` array of
+        // { src, caption } entries, render them as an image grid.
+        // otherwise show the placeholder boxes.
+        const mediaHost = document.getElementById('detail-media');
+        mediaHost.innerHTML = '';
+        if (r.media && r.media.length > 0) {
+          const label = document.createElement('div');
+          label.className = 'label';
+          label.textContent = '// supplementary media';
+          mediaHost.appendChild(label);
+          const grid = document.createElement('div');
+          grid.className = 'media-grid';
+          r.media.forEach(m => {
+            const item = document.createElement('a');
+            item.className = 'media-item';
+            item.href = m.src;
+            item.target = '_blank';
+            item.rel = 'noopener';
+            const img = document.createElement('img');
+            img.src = m.src;
+            img.alt = m.caption || '';
+            img.loading = 'lazy';
+            img.onerror = () => {
+              item.classList.add('media-failed');
+              img.remove();
+              const err = document.createElement('div');
+              err.className = 'media-error';
+              err.innerHTML =
+                '<span class="me-tag">ENOENT</span>' +
+                '<span class="me-path">' + escapeHtml(m.src.split('/').pop()) + '</span>';
+              item.prepend(err);
+            };
+            item.appendChild(img);
+            if (m.caption) {
+              const cap = document.createElement('div');
+              cap.className = 'media-caption';
+              cap.textContent = m.caption;
+              item.appendChild(cap);
+            }
+            grid.appendChild(item);
+          });
+          mediaHost.appendChild(grid);
+        } else {
+          const label = document.createElement('div');
+          label.className = 'label';
+          label.textContent = '// supplementary media (coming soon)';
+          mediaHost.appendChild(label);
+          const placeholder = document.createElement('div');
+          placeholder.className = 'placeholder';
+          for (let i = 0; i < 3; i++) placeholder.appendChild(document.createElement('div')).className = 'box';
+          mediaHost.appendChild(placeholder);
+        }
+      }
+
+      // universal view transition (with boot sequence)
+      let projectsUnlocked = false;
+
+      // Which view a navigation request actually lands on. The auth gate
+      // lives here, alone and side-effect free, so it can be reasoned about
+      // (and tested) without dragging in the whole transition machinery.
+      function resolveTarget(viewName, params) {
+        if (viewName === 'classified' && !projectsUnlocked) return 'auth';
+        // an entry with no page written yet resolves to nothing
+        if (viewName === 'detail' && params && params.slug && !hasPage(params.slug)) return '404';
+        return viewName;
+      }
+
+      function transitionTo(viewName, params) {
+        // close any modal UI so it doesnt float over the transition boot
+        try { if (cmdBar && !cmdBar.hasAttribute('hidden')) cmdClose(); } catch (e) {}
+
+        const target = resolveTarget(viewName, params);
+
+        // the crash screen is shared, so tell it which failure to report
+        if (target === '404') {
+          const slug = params && params.slug;
+          populate404(slug ? 'nopage' : 'pgp', slug);
+        }
+
+        const detailSlug = (viewName === 'detail' && params && params.slug) ? params.slug : null;
+
+        // no-op if we're already where we're going. for roles that means
+        // the *same* role — hopping between siblings must still transition.
+        if (currentView() === target) {
+          if (target !== 'detail') return;
+          if (detailSlug && detailSlug === currentDetailSlug) return;
+        }
+
+        const boot = BOOTS[target] || BOOTS[viewName];
+        if (!boot) {
+          if (detailSlug) populateDetail(detailSlug);
+          setView(target);
+          return;
+        }
+
+        // dual fade: portfolio -> transition -> portfolio
+        fadeOut(portfolio, () => {
+          showScreen(transition);
+          runBoot(boot, () => {
+            fadeOut(transition, () => {
+              // Swap role content here — the outgoing screen is already
+              // hidden and the portfolio hasn't been shown yet, so a
+              // role->role hop never flashes the new content over the old.
+              // Must run before setView, which reads currentDetailSlug.
+              if (detailSlug) populateDetail(detailSlug);
+              showScreen(portfolio);
+              setView(target);
+            });
+          });
+        });
+      }
+
+      // SEGFAULT VIEW
+      // The same crash screen serves several different failures, so the
+      // trace has to describe the one that actually happened — it used to
+      // report a missing PGP key no matter what you did.
+      const FAULTS = {
+        pgp: {
+          sub:   'signal 11 (SIGSEGV) &nbsp;·&nbsp; address 0x00000000',
+          trace: ['exitzero:contact.rs:42', 'exitzero:pgp.rs:1337', 'exitzero:main.rs:0'],
+          fault: 'attempted to dereference null pointer',
+          code:  [
+            '<span class="c">&gt;</span> public_key = fetch_from_disk(<span class="s">"~/.gnupg/pubkey.asc"</span>);',
+            '<span class="c">&gt;</span> public_key = <span class="n">None</span>;  <span class="co">// key not yet published</span>',
+            '<span class="c">&gt;</span> public_key.encrypt(<span class="k">...</span>);',
+            '<div class="err-underline">&nbsp;&nbsp;<span class="e">~~~~~~~~~~~^~~~~~~~~</span> cannot access members of <span class="n">None</span></div>',
+          ],
+        },
+        nopage: {
+          sub:   'signal 11 (SIGSEGV) &nbsp;·&nbsp; unwritten section',
+          trace: ['exitzero:router.rs:88', 'exitzero:render.rs:12', 'exitzero:main.rs:0'],
+          fault: 'entry exists, page does not',
+          code:  [
+            '<span class="c">&gt;</span> entry = registry.get(<span class="s">"{slug}"</span>);',
+            '<span class="c">&gt;</span> render(entry.page);',
+            '<div class="err-underline">&nbsp;&nbsp;<span class="e">~~~~~~~~~~~~^~~~</span> <span class="n">None</span> \u2014 not written yet</div>',
+            '<span class="c">&gt;</span> <span class="co">// the card is real. the writeup is pending.</span>',
+          ],
+        },
+      };
+
+      function populate404(kind, slug) {
+        const f = FAULTS[kind] || FAULTS.pgp;
+        const sub = document.getElementById('sf-sub');
+        if (sub) sub.innerHTML = f.sub;
+        const tr = document.getElementById('sf-trace');
+        if (tr) tr.innerHTML = f.trace
+          .map(l => '<div class="trace-line"><span class="tk">at</span> ' + l + '</div>').join('');
+        const fl = document.getElementById('sf-fault');
+        if (fl) fl.innerHTML = '<span class="tk">fault:</span> ' + f.fault;
+        const cd = document.getElementById('sf-code');
+        if (cd) cd.innerHTML = f.code
+          .map(l => (l.indexOf('<div') === 0 ? l : '<div>' + l + '</div>'))
+          .join('').replace(/\{slug\}/g, slug || '?');
+      }
+
+      // UNLOCK SEQUENCE — the one transition that lies to you.
+      //
+      // It opens exactly like every other boot on the site, so the user
+      // settles into something familiar. Then the integrity check fails,
+      // the screen tears, and matrix rain eats the boot log itself before
+      // the classified page surfaces out of the black.
+      function unlockSequence() {
+        try { if (cmdBar && !cmdBar.hasAttribute('hidden')) cmdClose(); } catch (e) {}
+
+        // straight into the boot — no fade, so the log is simply there
+        showScreenInstant(transition);
+        // The log starts coming apart the moment it reports the framebuffer
+        // going wrong — so the last line lands into a display that is already
+        // failing, rather than the corruption arriving out of nowhere once
+        // the sequence has politely finished.
+        let decay = null;
+        runBoot(BOOTS.unlock, () => {
+          setTimeout(() => matrixDissolve(() => {
+            if (decay) decay.stop();
+            // swapped while the canvas is still opaque, so the page is
+            // simply there when the black lifts
+            showScreenInstant(portfolio);
+            setView('classified');
+          }), 300);
+        }, (m) => {
+          if (m === 'decay' && !decay) decay = decayBootLog();
+        });
+      }
+
+      // global click handler for anything with [data-view] — passes
+      // the whole dataset so cards can send data-slug="kea-aerospace" etc.
+      document.addEventListener('click', (e) => {
+        const el = e.target.closest('[data-view]');
+        if (!el) return;
+        e.preventDefault();
+
+        // role cards get a brief visible loading state before the
+        // transition kicks in — click confirmation + "analyzing..." vibe
+        if (el.classList.contains('role-card')) {
+          const hint = el.querySelector('.click-hint span:first-child');
+          const orig = hint ? hint.textContent : null;
+          if (hint) hint.textContent = 'analyzing...';
+          el.classList.add('loading');
+          const params = { ...el.dataset };
+          setTimeout(() => transitionTo(el.dataset.view, params), 260);
+          setTimeout(() => {
+            el.classList.remove('loading');
+            if (hint && orig) hint.textContent = orig;
+          }, 2200);
+          return;
+        }
+
+        transitionTo(el.dataset.view, { ...el.dataset });
+      });
+
+      // XOR CHALLENGE
+      // ------------------------------------------------------------
+      //  hint 1: 6 chars, lowercase.
+      //  hint 2: legendary underground hacker zine, est. 1985.
+      //  hint 3: the key is the answer to life, the universe, and
+      //          everything.
+      //  hint 4: verify => (input[i] ^ KEY) === CIPHER[i]
+      //
+      //  reverse the operation: input[i] = CIPHER[i] ^ KEY
+      const KEY    = 42;                                           // hex 0x2a; the answer
+      const CIPHER = [0x5a, 0x42, 0x58, 0x4b, 0x49, 0x41];         // xor'd against KEY
+
+      function verifyPassword(input) {
+        if (typeof input !== 'string') return false;
+        const s = input.trim().toLowerCase();
+        if (s.length !== CIPHER.length) return false;
+        for (let i = 0; i < CIPHER.length; i++) {
+          if ((s.charCodeAt(i) ^ KEY) !== CIPHER[i]) return false;
+        }
+        return true;
+      }
+
+      const authForm     = document.getElementById('auth-form');
+      const authInput    = document.getElementById('auth-input');
+      const authSubmit   = authForm.querySelector('.auth-submit');
+      const authMsg      = document.getElementById('auth-msg');
+      const authAttempts = document.getElementById('auth-attempts');
+      const authHintBlk  = document.getElementById('auth-hint-block');
+      let attempts = 0;
+
+      // rate limiting: after N failures, lock the form for a cooldown
+      const RATE_LIMIT_THRESHOLD = 10;
+      const COOLDOWN_MS          = 30_000;
+      let cooldownEndTime = 0;
+      let cooldownTimer = null;
+
+      function tickCooldown() {
+        const remainingMs = cooldownEndTime - Date.now();
+        if (remainingMs <= 0) {
+          authForm.classList.remove('rate-limited');
+          authInput.disabled = false;
+          authSubmit.disabled = false;
+          authMsg.innerHTML = '<span style="color: var(--fg-dim);">// cooldown expired. try again.</span>';
+          cooldownTimer = null;
+          return;
+        }
+        const s = Math.ceil(remainingMs / 1000);
+        authMsg.innerHTML = '<span class="err">// rate-limited. cooling down (' + s + 's)</span>';
+        cooldownTimer = setTimeout(tickCooldown, 250);
+      }
+
+      function startCooldown() {
+        cooldownEndTime = Date.now() + COOLDOWN_MS;
+        authForm.classList.add('rate-limited');
+        authInput.disabled = true;
+        authSubmit.disabled = true;
+        if (cooldownTimer) clearTimeout(cooldownTimer);
+        tickCooldown();
+      }
+
+      authForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (Date.now() < cooldownEndTime) return;   // ignore during cooldown
+        const value = authInput.value;
+        // an empty submit isn't an attempt — don't deny, don't count it,
+        // don't shake. stray Enter presses shouldn't burn the rate limit.
+        if (!value) return;
+
+        if (verifyPassword(value)) {
+          authMsg.innerHTML = '<span class="ok">// access granted. decrypting vault...</span>';
+          projectsUnlocked = true;
+
+          // hand off to the bespoke unlock transition
+          setTimeout(unlockSequence, 320);
+
+          // animate the permission bits on the classified entry in
+          // the projects list. drwx------ (owner-only) → drwxr-xr-x.
+          // Scramble each char position, then lock into the new perms.
+          // Colour is handled by the .unlocked class so the card settles
+          // into the rest of the list instead of staying a warning.
+          const lockedCard = document.querySelector('.proj-card.locked');
+          if (lockedCard) lockedCard.classList.add('unlocked');
+          const permsEl = document.getElementById('classified-perm');
+          if (permsEl) {
+            const finalPerms = 'drwxr-xr-x';
+            const glitchPool = '-rwxstXST01!@#';
+            const frames     = 22;
+            const frameMs    = 40;
+            const lockAt = (i) => Math.floor((i + 1) / finalPerms.length * frames * 0.9);
+            let f = 0;
+            (function tick() {
+              let out = '';
+              for (let i = 0; i < finalPerms.length; i++) {
+                if (f >= lockAt(i)) out += finalPerms[i];
+                else                out += glitchPool[Math.floor(Math.random() * glitchPool.length)];
+              }
+              permsEl.textContent = out;
+              f++;
+              if (f <= frames) setTimeout(tick, frameMs);
+              else             permsEl.textContent = finalPerms;
+            })();
+          }
+
+        } else {
+          attempts++;
+          authAttempts.textContent = attempts;
+          if (attempts >= RATE_LIMIT_THRESHOLD) {
+            startCooldown();
+            return;
+          }
+          authMsg.innerHTML = '<span class="err">// access denied. wrong signature.</span>';
+          authForm.classList.remove('shake');
+          void authForm.offsetWidth;   // reflow
+          authForm.classList.add('shake');
+          authInput.select();
+          if (attempts >= 3) authHintBlk.classList.add('show');
+        }
+      });
+
+      // glitch effect
+      //   - single-char corruption every ~800ms (rest state)
+      //   - multi-char burst every ~4.5s (rest state)
+      //   - HOVER (the locked project card OR the glitch element itself)
+      //     ramps up character corruption to ~180ms and bursts to
+      //     ~1.5s — the RGB split animation stays constant either way
+      const glitchTargets = document.querySelectorAll('[data-glitch]');
+      const GLITCH_CHARS  = '!@#$%^&*<>[]{}01_\\/|~`';
+
+      function corruptOne(original) {
+        const chars = original.split('');
+        const idx = Math.floor(Math.random() * chars.length);
+        if (!/[a-zA-Z0-9]/.test(chars[idx])) return null;
+        chars[idx] = GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+        return chars.join('');
+      }
+
+      function htmlEsc(s) {
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+
+      function corruptMany(original, count) {
+        const chars = original.split('');
+        const used = new Set();
+        let done = 0, tries = 0;
+        while (done < count && tries < 20) {
+          tries++;
+          const idx = Math.floor(Math.random() * chars.length);
+          if (used.has(idx) || !/[a-zA-Z0-9]/.test(chars[idx])) continue;
+          used.add(idx);
+          chars[idx] = GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+          done++;
+        }
+        return chars.join('');
+      }
+
+      glitchTargets.forEach(el => {
+        const original = el.textContent;
+        el.setAttribute('data-glitch-text', original);
+        const mode = el.getAttribute('data-glitch');   // 'subtle' | '' (full)
+
+        // ---- subtle mode: the hero "Reverse Engineer" tease ----
+        // real glitch, not a flip-flop. picks one char position, then
+        // stutters through 5-7 rapid micro-frames at that position:
+        //   - most frames: random junk char + RGB split + position jitter
+        //   - ~22% of frames: brief flash back to the ORIGINAL char,
+        //     clean (no RGB, no jitter) — the "trying to lock" beat
+        //   - RGB intensity + jitter direction re-rolled every frame
+        // total duration per glitch: ~200-450ms, fires every ~1.1s.
+        if (mode === 'subtle') {
+          const INTENSITIES = ['tight', 'mid', 'wide'];
+          let running = false;
+
+          function runScratch() {
+            if (running) return;
+
+            // pick a corruptible index once — the whole stutter happens
+            // at the SAME character position (that's the DJ-scratch feel)
+            let idx = -1;
+            for (let a = 0; a < 8; a++) {
+              const i = Math.floor(Math.random() * original.length);
+              if (/[a-zA-Z0-9]/.test(original[i])) { idx = i; break; }
+            }
+            if (idx === -1) return;
+
+            running = true;
+            const frames  = 5 + Math.floor(Math.random() * 3);   // 5-7 frames
+            const before  = htmlEsc(original.slice(0, idx));
+            const after   = htmlEsc(original.slice(idx + 1));
+            const origCh  = original[idx];
+
+            let step = 0;
+            (function tick() {
+              if (step >= frames) {
+                el.textContent = original;
+                running = false;
+                return;
+              }
+
+              let ch, cls, styleAttr = '';
+
+              if (Math.random() < 0.22) {
+                // flash back to original — no RGB, no jitter
+                ch  = origCh;
+                cls = '';
+              } else {
+                // corrupted frame — random char, RGB, jitter
+                ch = GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+                cls = 'glitch-char ' + INTENSITIES[Math.floor(Math.random() * INTENSITIES.length)];
+                const jx = (Math.random() * 2 - 1).toFixed(2);
+                const jy = (Math.random() * 1.2 - 0.6).toFixed(2);
+                styleAttr = ' style="transform: translate(' + jx + 'px, ' + jy + 'px)"';
+              }
+
+              const clsAttr = cls ? ' class="' + cls + '"' : '';
+              el.innerHTML =
+                before + '<span' + clsAttr + styleAttr + '>' + htmlEsc(ch) + '</span>' + after;
+
+              step++;
+              setTimeout(tick, 40 + Math.floor(Math.random() * 25));   // 40-65ms/frame
+            })();
+          }
+
+          setInterval(() => {
+            if (Math.random() < 0.45) return;   // ~55% chance to fire a scratch
+            runScratch();
+          }, 1100);
+          return;
+        }
+
+        // ---- full mode: the locked project card, hover-aware + bursts ----
+        const hoverEl = el.closest('.proj-card.locked') || el;
+        let hovering = false;
+        hoverEl.addEventListener('mouseenter', () => { hovering = true; });
+        hoverEl.addEventListener('mouseleave', () => { hovering = false; });
+
+        // single-char corruption loop
+        (function singleTick() {
+          const interval   = hovering ? 180 : 800;
+          const fireChance = hovering ? 0.85 : 0.7;
+          if (Math.random() < fireChance) {
+            const corrupted = corruptOne(original);
+            if (corrupted) {
+              el.textContent = corrupted;
+              setTimeout(() => { el.textContent = original; }, 90);
+            }
+          }
+          setTimeout(singleTick, interval);
+        })();
+
+        // multi-char burst loop
+        (function burstTick() {
+          const interval   = hovering ? 1500 : 4500;
+          const fireChance = hovering ? 0.8 : 0.6;
+          if (Math.random() < fireChance) {
+            const count = 2 + Math.floor(Math.random() * 3);
+            el.textContent = corruptMany(original, count);
+            setTimeout(() => { el.textContent = original; }, 180);
+          }
+          setTimeout(burstTick, interval);
+        })();
+      });
+
+      // status bar: clock + load avg
+      const clockEl = document.getElementById('clock');
+      function tick() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        clockEl.textContent = `${hh}:${mm}:${ss}`;
+      }
+      tick();
+      setInterval(tick, 1000);
+
+      const loadEl = document.getElementById('load-avg');
+      setInterval(() => {
+        const base = 0.28 + Math.random() * 0.4;
+        loadEl.textContent = base.toFixed(2);
+      }, 3000);
+
+      // uptime — ticks up from page load
+      const uptimeEl = document.getElementById('uptime');
+      const bootTime = Date.now();
+      function updateUptime() {
+        const s = Math.floor((Date.now() - bootTime) / 1000);
+        const d = Math.floor(s / 86400);
+        const h = Math.floor((s % 86400) / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const sec = s % 60;
+        if (d > 0)      uptimeEl.textContent = d + 'd ' + h + 'h';
+        else if (h > 0) uptimeEl.textContent = h + 'h ' + m + 'm';
+        else            uptimeEl.textContent = m + 'm ' + sec + 's';
+      }
+      updateUptime();
+      setInterval(updateUptime, 1000);
+
+      // feed FRAME counter — reads like a real video timecode.
+      // 30fps counter updating every 100ms so it visibly ticks.
+      // Freezes when the feed is in no-signal state (no video loaded).
+      const feedTimeEl = document.getElementById('feed-time');
+      function updateFeedTime() {
+        if (!feedTimeEl) return;
+        const feed = document.getElementById('detail-feed');
+        // no-signal state — text was already set to FRAME ------ by the
+        // populateRole handler; leave it frozen there until video resumes
+        if (feed && feed.classList.contains('no-signal')) return;
+        const frame = Math.floor((Date.now() - bootTime) / (1000 / 30));
+        feedTimeEl.textContent = 'FRAME ' + String(frame).padStart(6, '0');
+      }
+      updateFeedTime();
+      setInterval(updateFeedTime, 100);
+
+      // clock — resolves short timezone once, re-checks every 30min for DST
+      function getTzShort() {
+        try {
+          const parts = new Intl.DateTimeFormat('en', { timeZoneName: 'short' }).formatToParts(new Date());
+          const tz = parts.find(p => p.type === 'timeZoneName');
+          return tz ? tz.value : '';
+        } catch (e) { return ''; }
+      }
+      let tzShort = getTzShort();
+      setInterval(() => { tzShort = getTzShort(); }, 30 * 60 * 1000);
+
+      // net counters — simulated packet activity that ticks up
+      const netRxEl = document.getElementById('net-rx');
+      const netTxEl = document.getElementById('net-tx');
+      const netItem = netTxEl.closest('.item');
+      let rxBytes = 0, txBytes = 0;
+      let netAlive = true;   // gated by online/offline detector below
+      function fmtBytes(n) {
+        if (n < 1024)         return n + 'B';
+        if (n < 1024 * 1024)  return (n / 1024).toFixed(1) + 'k';
+        return (n / (1024 * 1024)).toFixed(1) + 'M';
+      }
+      setInterval(() => {
+        if (!netAlive) return;   // frozen when offline
+        rxBytes += Math.floor(Math.random() * 1400 + 100);
+        txBytes += Math.floor(Math.random() * 400  + 40);
+        netRxEl.textContent = fmtBytes(rxBytes);
+        netTxEl.textContent = fmtBytes(txBytes);
+      }, 1400);
+
+      // online / offline detection — flips indicator + label + freezes
+      // net counters until back online. real signal, not decoration.
+      const netIndicator = document.getElementById('net-indicator');
+      const netStatus    = document.getElementById('net-status');
+      function reflectNetwork() {
+        const on = navigator.onLine;
+        netAlive = on;
+        if (on) {
+          netIndicator.classList.remove('offline');
+          netIndicator.parentElement.classList.remove('offline');
+          netItem.classList.remove('net-frozen');
+          netStatus.textContent = 'online';
+        } else {
+          netIndicator.classList.add('offline');
+          netIndicator.parentElement.classList.add('offline');
+          netItem.classList.add('net-frozen');
+          netStatus.textContent = 'offline';
+        }
+      }
+      window.addEventListener('online',  reflectNetwork);
+      window.addEventListener('offline', reflectNetwork);
+      reflectNetwork();
+
+      // BOOT LOG DECAY — the terminal keeps falling apart on its own.
+      //
+      // Deliberately started before the rain rather than alongside it: two
+      // effects beginning on the same frame read as one event. The text has
+      // to be visibly coming apart first, so the rain arrives as a second
+      // thing going wrong rather than the cause of the first.
+      function decayBootLog() {
+        const spans = bootLog ? Array.from(bootLog.children) : [];
+        const orig  = spans.map(s => s.textContent);
+        const BLOCK = '\u2593\u2592\u2591';
+        const JUNK  = '!@#$%^&*<>[]{}01_\\/|~`\u00a7\u00b1\u00ac\u00a6';
+        const OVER  = 1500;
+        const t0    = performance.now();
+
+        // Damage arrives in bursts against whole lines, not as a steady
+        // sprinkle over every character. Scattering random glyphs evenly
+        // reads as decoration — real corruption takes out contiguous runs,
+        // leaves its neighbours untouched, and mostly recovers until it
+        // doesn't.
+        const state = spans.map(() => null);   // { html, until } | null
+        const pick  = (s) => s[(Math.random() * s.length) | 0];
+        const esc   = escBootHtml;
+
+        // one contiguous run of a line, wrecked
+        function damage(line, t) {
+          const n = line.length;
+          if (n < 4) return esc(line);
+          const mode = Math.random();
+
+          // a block of bytes overwritten in place
+          if (mode < 0.42) {
+            const from = (Math.random() * n * 0.7) | 0;
+            const len  = 3 + ((Math.random() * (n * (0.15 + t * 0.5))) | 0);
+            let run = '';
+            for (let i = 0; i < len && from + i < n; i++) run += pick(Math.random() < 0.6 ? BLOCK : JUNK);
+            const body = esc(line.slice(0, from)) + wrap(run, t) + esc(line.slice(from + run.length));
+            return body;
+          }
+          // the line shunted sideways
+          if (mode < 0.60) {
+            const shift = 1 + ((Math.random() * 6) | 0);
+            return Math.random() < 0.5
+              ? esc(' '.repeat(shift) + line)
+              : esc(line.slice(shift));
+          }
+          // cut off, with whatever came next in the buffer
+          if (mode < 0.76) {
+            const cut = 4 + ((Math.random() * (n - 4)) | 0);
+            let tail = '';
+            for (let i = 0; i < 2 + ((Math.random() * 6) | 0); i++) tail += pick(BLOCK);
+            return esc(line.slice(0, cut)) + wrap(tail, t);
+          }
+          // a fragment stuttering
+          if (mode < 0.90) {
+            const from = (Math.random() * (n - 3)) | 0;
+            const frag = line.slice(from, from + 2 + ((Math.random() * 5) | 0));
+            return esc(line.slice(0, from)) + esc(frag) + esc(frag) + esc(line.slice(from + frag.length));
+          }
+          let all = '';
+          for (let i = 0; i < n; i++) all += pick(BLOCK);
+          return wrap(all, t);
+        }
+
+        // channel separation, used sparingly — it is an accent on a burst,
+        // not the default state of the text
+        function wrap(str, t) {
+          if (Math.random() > 0.18 + t * 0.22) return esc(str);
+          const cls = ['tight', 'mid'][(Math.random() * 2) | 0];
+          return '<span class="glitch-char ' + cls + '">' + esc(str) + '</span>';
+        }
+
+        const iv = setInterval(() => {
+          const now  = performance.now();
+          const t    = Math.min(1, (now - t0) / OVER);
+          const busy = spans.length ? state.filter(Boolean).length / spans.length : 0;
+
+          // more lines break at once, and they hold longer, as it worsens
+          const want = Math.round(t * spans.length * 0.7);
+          if (busy < 1 && Math.random() < 0.35 + t * 0.6) {
+            for (let k = 0, tries = 0; k < Math.max(1, want - busy * spans.length) && tries < 8; tries++) {
+              const i = (Math.random() * spans.length) | 0;
+              if (state[i]) continue;
+              state[i] = { html: damage(orig[i], t), until: now + 90 + Math.random() * (140 + t * 500) };
+              k++;
+            }
+          }
+
+          for (let i = 0; i < spans.length; i++) {
+            if (state[i]) {
+              spans[i].innerHTML = state[i].html;
+              // past the point of no return, damage stops healing
+              if (now > state[i].until && t < 0.88) state[i] = null;
+            } else {
+              spans[i].textContent = orig[i];
+            }
+          }
+        }, 60);
+
+        return { stop: () => clearInterval(iv) };
+      }
+
+      // MATRIX DISSOLVE — the unlock transition.
+      //
+      // Rain falls down every column and consumes the page behind it:
+      // whatever a drop has passed is painted out permanently, so the
+      // screen is eaten away rather than covered over. Columns start at
+      // staggered heights and fall at different rates, so the edge that
+      // devours the page is ragged instead of a wipe.
+      //
+      // Ends on full black, which is also what the boot screen is — so
+      // handing over to the normal transition is seamless.
+      function matrixDissolve(done) {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) { done(); return; }
+
+        const canvas = document.createElement('canvas');
+        canvas.className = 'dissolve-canvas';
+        document.body.appendChild(canvas);
+
+        const ctx = canvas.getContext('2d');
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const W = window.innerWidth, H = window.innerHeight;
+        canvas.width  = W * dpr;
+        canvas.height = H * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const CELL = RAIN_CELL;
+        const cols = Math.ceil(W / CELL) + 1;
+        const g = () => RAIN_CHARS[(Math.random() * RAIN_CHARS.length) | 0];
+        const ri = (n) => (Math.random() * n) | 0;
+
+        // Descent is stepped, not smooth: a column advances a whole cell at
+        // a time, on its own irregular clock, and can stall or lurch. Nothing
+        // is in sync with anything else, so the page comes apart unevenly.
+        // Each bite is a fraction of the viewport rather than a fixed number
+        // of rows, so the dissolve takes the same time on any screen instead
+        // of dragging on a tall one. Measured at ~1.3s from phone to desktop.
+        const STEP = H / 14;
+
+        // Two things happen per column. First it just rains — same one
+        // glyph per frame plus a canvas-wide fade the landing backdrop uses,
+        // so it is visually the same rain falling over the boot log and
+        // destroying nothing. Then, one column at a time, a second head
+        // appears at the top and eats its way down, leaving black behind.
+        const origin = Math.random() * cols;
+        const drops = [];
+        for (let i = 0; i < cols; i++) {
+          drops.push({
+            // ambient rain, matching the landing's pace. Every drop enters
+            // from above the viewport rather than materialising mid-screen —
+            // the stagger is scaled by each drop's own speed so they all
+            // arrive within the same window regardless of how fast they fall.
+            speed:  (0.25 + Math.random() * 0.55) * CELL,
+            ch:     g(),
+            // the consuming head
+            recruitAt: 36 + Math.round(Math.abs(i - origin) / cols * 22) + ri(10),
+            y:      0,                            // set below, needs `speed`
+            eaten:  0,
+            tick:   0,
+            period: 1 + ri(3),
+            headCh: g(),
+          });
+          const d = drops[i];
+          d.y = -Math.random() * d.speed * 30;    // 0-30 frames above the top
+        }
+
+        ctx.font = CELL + 'px "JetBrains Mono", ui-monospace, monospace';
+        ctx.textBaseline = 'top';
+
+        let tears = [];
+        let frames = 0;
+
+        let raf = null;
+        let finished = false;
+        function finish() {
+          if (finished) return;
+          finished = true;
+          if (raf) cancelAnimationFrame(raf);
+          done();
+          canvas.classList.add('fading');
+          setTimeout(() => canvas.remove(), 320);
+        }
+
+        function frame() {
+          frames++;
+          let allPast = true;
+
+          // the landing's trail: fade what is already drawn rather than
+          // redrawing a trail of glyphs every frame
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+          ctx.fillRect(0, 0, W, H);
+          ctx.globalCompositeOperation = 'source-over';
+
+          // --- ambient rain, one glyph per column ---
+          ctx.fillStyle = 'rgba(77, 255, 176, 0.55)';
+          for (let i = 0; i < cols; i++) {
+            const d = drops[i];
+            d.ch = g();
+            ctx.fillText(d.ch, i * CELL, d.y);
+            d.y += d.speed;
+            if (d.y > H) d.y = 0;
+          }
+
+          // --- the consuming heads ---
+          for (let i = 0; i < cols; i++) {
+            const d = drops[i];
+            const x = i * CELL;
+
+            if (frames < d.recruitAt) { allPast = false; continue; }
+
+            if (++d.tick >= d.period) {
+              d.tick = 0;
+              const r = Math.random();
+              if (r < 0.09) {
+                d.eaten += STEP * (2 + ri(3));      // lurch
+              } else if (r < 0.17) {
+                d.period = 2 + ri(4);               // stall
+              } else {
+                d.eaten += STEP;
+                if (Math.random() < 0.25) d.period = 1 + ri(3);
+              }
+              d.headCh = g();
+            }
+
+            // everything above the head is gone
+            ctx.fillStyle = '#000';
+            ctx.fillRect(x, 0, CELL + 1, Math.min(d.eaten, H));
+
+            // the glyph doing the eating, sat on the edge
+            if (d.eaten < H + CELL) {
+              const jx = Math.random() < 0.12 ? (Math.random() * 4 - 2) : 0;
+              const gy = Math.floor(d.eaten / CELL) * CELL;
+              if (Math.random() < 0.025) {
+                ctx.fillStyle = 'rgba(255,45,117,0.55)';
+                ctx.fillText(d.headCh, x + jx + 2, gy);
+                ctx.fillStyle = 'rgba(125,229,255,0.55)';
+                ctx.fillText(d.headCh, x + jx - 2, gy);
+              }
+              ctx.fillStyle = 'rgba(77,255,176,0.95)';
+              ctx.shadowColor = 'rgba(77,255,176,0.7)';
+              ctx.shadowBlur = 6;
+              ctx.fillText(d.headCh, x + jx, gy);
+              ctx.shadowBlur = 0;
+            }
+
+            if (d.eaten < H) allPast = false;
+          }
+
+          // horizontal tears — grab a band and shove it sideways
+          if (Math.random() < 0.16) {
+            const by = Math.random() * H;
+            const bh = 6 + Math.random() * 40;
+            const dx = (Math.random() * 70 - 35) | 0;
+            ctx.drawImage(canvas,
+              0, by * dpr, canvas.width, bh * dpr,
+              dx, by, W, bh);
+          }
+
+          // brief holes punched back through the consumed area
+          if (Math.random() < 0.22) {
+            tears.push({
+              x: Math.random() * W, y: Math.random() * H,
+              w: 20 + Math.random() * 160, h: 4 + Math.random() * 26,
+              life: 1 + ri(3),
+            });
+          }
+          tears = tears.filter(t => {
+            ctx.clearRect(t.x, t.y, t.w, t.h);
+            return --t.life > 0;
+          });
+
+          if (allPast) { finish(); return; }
+          raf = requestAnimationFrame(frame);
+        }
+        frame();
+
+        // never strand the user if a frame loop stalls
+        setTimeout(finish, 3000);
+      }
+
+      // SIGNAL GLITCH — dramatic multi-phase malfunction. combines
+      // body-shake + RGB chromatic aberration + brief negative flash
+      // + scanline overlay + multiple page tears at random Y positions.
+      // GATED: only fires while the portfolio is active — never on
+      // the landing screen or during a boot-transition.
+      // TUNABLE INTERVAL — production values, 5 to 10 minute random gap.
+      //   dev tuning values: MIN 5000, MAX 5000
+      const GLITCH_INTERVAL_MIN = 5  * 60 * 1000;
+      const GLITCH_INTERVAL_MAX = 10 * 60 * 1000;
+
+      function fireGlitch(force) {
+        // ambient glitches only fire while browsing; the unlock passes
+        // force:true so it can also break the transition screen
+        if (!force && !portfolio.classList.contains('active')) return;
+
+        const shakeTarget = document.querySelector('.screen.active') || document.body;
+        shakeTarget.classList.remove('glitching');
+        void shakeTarget.offsetWidth;      // force reflow so animation restarts
+
+        // scanline overlay lives only for the duration of the glitch
+        const overlay = document.createElement('div');
+        overlay.className = 'glitch-overlay';
+        document.body.appendChild(overlay);
+
+        // helper: spawn one tear with fully randomized position, width,
+        // anchor, height, shift, and color variant. returns the node.
+        function spawnTear() {
+          const tear = document.createElement('div');
+          tear.className = 'page-tear';
+          tear.dataset.variant = Math.floor(Math.random() * 5);
+
+          const y = 20 + Math.random() * (window.innerHeight - 40);
+          // variant 3 is a thin data-error line, force it small
+          const isThin = tear.dataset.variant === '3';
+          const height = isThin ? (1 + Math.random() * 2) : (3 + Math.random() * 38);
+
+          // anchor pattern: full-width, left-edge, right-edge, or floating
+          const anchor = Math.random();
+          if (anchor < 0.20) {
+            tear.style.left = '0';
+            tear.style.right = '0';
+          } else if (anchor < 0.50) {
+            // left-anchored, partial width (15-70%)
+            tear.style.left = '0';
+            tear.style.right = 'auto';
+            tear.style.width = (15 + Math.random() * 55) + '%';
+          } else if (anchor < 0.80) {
+            // right-anchored, partial width (15-70%)
+            tear.style.right = '0';
+            tear.style.left = 'auto';
+            tear.style.width = (15 + Math.random() * 55) + '%';
+          } else {
+            // floating middle chunk
+            const width = 10 + Math.random() * 40;
+            tear.style.left = (Math.random() * (100 - width)) + '%';
+            tear.style.right = 'auto';
+            tear.style.width = width + '%';
+          }
+
+          // bigger shift magnitude for real displacement chaos
+          const xMag  = 15 + Math.random() * 60;
+          const xSign = Math.random() < 0.5 ? -1 : 1;
+          tear.style.top = y + 'px';
+          tear.style.height = height + 'px';
+          tear.style.setProperty('--tear-x', (xMag * xSign) + 'px');
+
+          document.body.appendChild(tear);
+          return tear;
+        }
+
+        // wave 1 — immediate volley of 6-11 tears
+        const tears = [];
+        const wave1 = 6 + Math.floor(Math.random() * 6);
+        for (let i = 0; i < wave1; i++) tears.push(spawnTear());
+
+        // wave 2 — stutter wave 140ms in with fresh 4-7 tears
+        setTimeout(() => {
+          const wave2 = 4 + Math.floor(Math.random() * 4);
+          for (let i = 0; i < wave2; i++) tears.push(spawnTear());
+        }, 140);
+
+        shakeTarget.classList.add('glitching');
+        setTimeout(() => {
+          shakeTarget.classList.remove('glitching');
+          overlay.remove();
+          tears.forEach(t => t.remove());
+        }, 700);
+      }
+      function scheduleNextGlitch() {
+        const delay = GLITCH_INTERVAL_MIN + Math.random() * (GLITCH_INTERVAL_MAX - GLITCH_INTERVAL_MIN);
+        setTimeout(() => {
+          fireGlitch();
+          scheduleNextGlitch();
+        }, delay);
+      }
+      // don't start the glitch clock until the user has actually reached
+      // the main portfolio view. that way the first random 5-10 min gap
+      // is measured from the arrival on main, not from page load — so we
+      // never glitch immediately after login (which reads as weird).
+      let glitchScheduleStarted = false;
+      new MutationObserver(() => {
+        if (portfolio.classList.contains('active') && !glitchScheduleStarted) {
+          glitchScheduleStarted = true;
+          scheduleNextGlitch();
+        }
+      }).observe(portfolio, { attributes: true, attributeFilter: ['class'] });
+
+      // RECONNECT TOAST — when the tab loses focus for a real moment
+      // and comes back, show a small "reconnected · session restored"
+      // toast bottom-center. Uses visibilitychange only — window.blur/
+      // focus was too noisy (fired on address-bar clicks, devtools,
+      // iframe interactions, etc.).
+      const reconnectToast = document.createElement('div');
+      reconnectToast.className = 'reconnect-toast';
+      reconnectToast.textContent = '[reconnected · session restored]';
+      document.body.appendChild(reconnectToast);
+
+      let hiddenSince = null;
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          hiddenSince = Date.now();
+          // Snap to the dimmed state INSTANTLY — no transition, so the
+          // browser doesn't leave a half-finished "dimming" animation
+          // paused while the tab is hidden. Without this, refocusing
+          // showed the greying animation still playing before the un-dim.
+          const dimTarget = document.querySelector('.screen.active');
+          if (dimTarget) {
+            dimTarget.style.transition = 'none';
+            dimTarget.classList.add('dimmed');
+            void dimTarget.offsetHeight;     // force reflow to lock state
+          }
+        } else {
+          // capture state now, before we clear hiddenSince
+          const wasAwayLong = hiddenSince && (Date.now() - hiddenSince > 800);
+          const shouldToast = wasAwayLong && portfolio.classList.contains('active');
+          hiddenSince = null;
+
+          // restore CSS transition, reflow to commit that, then remove
+          // the class — the un-dim animation kicks off immediately.
+          document.querySelectorAll('.screen.dimmed').forEach(el => {
+            el.style.transition = '';
+            void el.offsetHeight;
+            el.classList.remove('dimmed');
+          });
+          if (shouldToast) {
+            reconnectToast.classList.add('show');
+            setTimeout(() => reconnectToast.classList.remove('show'), 2400);
+          }
+        }
+      });
+
+      // DIGITAL RAIN (landing background)
+      // Both rains on the site — the landing backdrop and the unlock
+      // dissolve — read from these, so they stay recognisably the same
+      // system however differently they behave.
+      const RAIN_CHARS = '01ABCDEFabcdef0123456789<>[]{}()!@#$%^&*/\\|~';
+      const RAIN_CELL  = 14;
+
+      const rainStop = (function initRain() {
+        const canvas = document.getElementById('rain');
+        if (!canvas) return () => {};
+        const ctx = canvas.getContext('2d');
+        const fontSize = RAIN_CELL;
+        const chars = RAIN_CHARS;
+        let width, height, columns, drops;
+
+        function resize() {
+          width  = canvas.width  = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+          columns = Math.floor(width / fontSize);
+          drops = Array.from({ length: columns }, () => ({
+            y: Math.random() * (height / fontSize),
+            speed: 0.25 + Math.random() * 0.55,
+          }));
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        let raf;
+        function draw() {
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+          ctx.fillRect(0, 0, width, height);
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.font = fontSize + 'px "JetBrains Mono", monospace';
+          ctx.fillStyle = 'rgba(77, 255, 176, 0.55)';
+          for (let i = 0; i < drops.length; i++) {
+            const drop = drops[i];
+            const c = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(c, i * fontSize, drop.y * fontSize);
+            if (drop.y * fontSize > height && Math.random() > 0.985) drop.y = 0;
+            drop.y += drop.speed;
+          }
+          raf = requestAnimationFrame(draw);
+        }
+        draw();
+        return () => { if (raf) cancelAnimationFrame(raf); };
+      })();
+
+      // stop the rain once landing goes away (save cycles)
+      const rainObserver = new MutationObserver(() => {
+        if (!landing.classList.contains('active')) {
+          rainStop();
+          rainObserver.disconnect();
+        }
+      });
+      rainObserver.observe(landing, { attributes: true, attributeFilter: ['class'] });
+
+      // COMMAND BAR ( / to open )
+      const cmdBar    = document.getElementById('cmd-bar');
+      const cmdInput  = document.getElementById('cmd-bar-input');
+      const cmdOutput = document.getElementById('cmd-bar-output');
+      const cmdHistory = [];
+      let cmdHistoryIdx = -1;
+
+      function cmdOpen() {
+        cmdBar.removeAttribute('hidden');
+        setTimeout(() => cmdInput.focus(), 20);
+      }
+      function cmdClose() {
+        cmdBar.setAttribute('hidden', '');
+        cmdInput.value = '';
+        cmdOutput.innerHTML = '';
+        cmdHistoryIdx = -1;
+        // completion state dies with the bar (menu node went with innerHTML)
+        cmdMenuEl = null;
+        tabState  = null;
+      }
+      function cmdEcho(text) {
+        const line = document.createElement('div');
+        line.className = 'line echo';
+        line.innerHTML = '<span class="arrow">&gt;</span> ' + escapeHtml(text);
+        cmdOutput.appendChild(line);
+        cmdOutput.scrollTop = cmdOutput.scrollHeight;
+      }
+      function cmdPrint(text, cls) {
+        const line = document.createElement('div');
+        line.className = 'line ' + (cls || '');
+        line.textContent = text;
+        cmdOutput.appendChild(line);
+        cmdOutput.scrollTop = cmdOutput.scrollHeight;
+      }
+      // prints a `name  -  description` help row, with each part in
+      // its own colored span. name is padded to 12 chars for alignment.
+      function cmdPrintCmdRow(name, desc) {
+        const line = document.createElement('div');
+        line.className = 'line';
+
+        const n = document.createElement('span');
+        n.className = 'cmd-name';
+        n.textContent = '  ' + name.padEnd(12);
+
+        const s = document.createElement('span');
+        s.className = 'cmd-sep';
+        s.textContent = '-';
+
+        const d = document.createElement('span');
+        d.className = 'cmd-desc';
+        d.textContent = desc;
+
+        line.appendChild(n);
+        line.appendChild(s);
+        line.appendChild(d);
+        cmdOutput.appendChild(line);
+        cmdOutput.scrollTop = cmdOutput.scrollHeight;
+      }
+      function escapeHtml(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      // shell-style directory names → view. shared between the cd
+      // command and its tab-completion.
+      // VIRTUAL FILESYSTEM
+      // A real tree so `cd` can walk nested paths the way a shell does:
+      //   cd experience/kea-aerospace
+      //   cd ../projects
+      //   cd ~/projects
+      // Each node maps to a view (and optional transition params).
+      const VFS = {
+        view: 'main',
+        files: {
+          'about.md':    { kind: 'text', render: () => catAbout()   },
+          'skills.json': { kind: 'text', render: () => catSkills()  },
+          'contact':     { kind: 'exec', render: () => catContact() },
+        },
+        children: {
+          experience: { view: 'experience', children: {} },
+          projects:   {
+            view: 'projects',
+            children: {
+              // the lock lives on one entry, not the whole directory
+              classified: { view: 'classified', locked: true, children: {} },
+            },
+          },
+        },
+      };
+
+      // role slugs become children of ~/experience
+      // every entry is a directory you can cd into
+      PROJECTS.filter(p => !p.hidden).forEach(p => {
+        VFS.children.projects.children[p.slug] = {
+          view: 'detail', param: { slug: p.slug }, children: {},
+        };
+      });
+      CLASSIFIED.filter(p => !p.hidden).forEach(p => {
+        VFS.children.projects.children.classified.children[p.slug] = {
+          view: 'detail', param: { slug: p.slug }, children: {},
+        };
+      });
+
+      Object.entries(ROLES).forEach(([id, role]) => {
+        VFS.children.experience.children[role.slug] = {
+          view:     'detail',
+          param:    { slug: role.slug },
+          children: {},
+        };
+      });
+
+      // names that all mean "go home" (~). `main` matches the workspace
+      // tab label, so it's the one people actually type.
+      const ROOT_ALIASES = new Set(['~', '/', 'home', 'main']);
+
+      // shorthand names that resolve to a real segment
+      const SEG_ALIAS = {
+        exp:  'experience',
+        proj: 'projects',
+      };
+
+      // current location as path segments, derived from the active view
+      function cwdSegments() {
+        const v = currentView();
+        if (v === 'experience')                 return ['experience'];
+        if (v === 'projects')                   return ['projects'];
+        if (v === 'auth' || v === 'classified') return ['projects', 'classified'];
+        if (v === 'detail' && currentDetailSlug)    return ['experience', currentDetailSlug];
+        return [];
+      }
+
+      // Walk `segs` from the VFS root. Returns the node, or null if any
+      // segment doesn't exist.
+      function walkSegments(segs) {
+        let node = VFS;
+        const resolved = [];
+        for (const raw of segs) {
+          const lower = raw.toLowerCase();
+          const key = SEG_ALIAS[lower] || lower;
+          if (!node.children || !node.children[key]) return null;
+          node = node.children[key];
+          resolved.push(key);
+        }
+        return { segments: resolved, node };
+      }
+
+      // Turn a user-typed path into { segments, node }, or null.
+      // Handles absolute (~/... or /...), relative, `.` and `..`.
+      function resolvePath(input, fromSegs) {
+        const trimmed = String(input || '').trim();
+        if (trimmed === '' || ROOT_ALIASES.has(trimmed.toLowerCase())) {
+          return { segments: [], node: VFS };
+        }
+        const isAbsolute = /^~\/?/.test(trimmed) || trimmed.startsWith('/');
+        const stripped = trimmed.replace(/^~\/?/, '').replace(/^\//, '');
+        const parts = stripped.split('/').filter(p => p !== '' && p !== '.');
+
+        const segs = isAbsolute ? [] : fromSegs.slice();
+        for (const p of parts) {
+          if (p === '..') { segs.pop(); continue; }
+          segs.push(p);
+        }
+        return walkSegments(segs);
+      }
+
+      // Names available for completion inside a given directory node.
+      function childNames(node) {
+        return node && node.children ? Object.keys(node.children) : [];
+      }
+      function fileNames(node) {
+        return node && node.files ? Object.keys(node.files) : [];
+      }
+
+      // FILE CONTENTS (what `cat` prints)
+      // Wrapped at runtime rather than hard-wrapped, so editing the
+      // copy never leaves ragged line breaks behind.
+      const CAT_WIDTH = 74;
+
+      function wrapText(text, width) {
+        const out = [];
+        text.split('\n').forEach(para => {
+          if (para.trim() === '') { out.push(''); return; }
+          let line = '';
+          para.split(/\s+/).forEach(word => {
+            if (line === '') { line = word; return; }
+            if ((line + ' ' + word).length > width) { out.push(line); line = word; }
+            else { line += ' ' + word; }
+          });
+          if (line) out.push(line);
+        });
+        return out;
+      }
+
+      function catAbout() {
+        cmdPrint('# about', 'ok');
+        cmdPrint('');
+        const body =
+          "exit 0 — no error, no exception, no story. Just success. I write software " +
+          "for multi-domain autonomous vehicles — air, land, sea, and subsurface — " +
+          "where that's the entire job. Real-time control, fault handling, code that " +
+          "gets one attempt with nobody standing by to catch it. I don't aim for " +
+          "exit zero. I remove the alternatives." +
+          "\n\n" +
+          "Zero is also what I leave behind. I take systems apart to understand how " +
+          "they were built — firmware, protocols, stripped binaries — and the rule " +
+          "is the same either way: get in, learn what I came for, leave nothing " +
+          "behind. Exit. Zero.";
+        wrapText(body, CAT_WIDTH).forEach(l => cmdPrint(l));
+      }
+
+      function catSkills() {
+        const skills = {
+          languages:  ['C++', 'C', 'Python', 'Bash'],
+          aerospace:  ['flight software', 'avionics firmware', 'STM32', 'ESP32'],
+          networking: ['TCP', 'UDP', 'IP', 'REST', 'sockets', 'live telemetry'],
+          graphics:   ['ImGui', 'Vulkan', 'Flutter'],
+          data:       ['NumPy', 'Pandas', 'YOLO', 'PyTorch'],
+          hardware:   ['Altium', 'SolidWorks', 'sensor prototyping'],
+          systems:    ['Linux', 'POSIX', 'Git', 'CMake'],
+          practices:  ['safety-critical', 'fault-handling', 'real-time'],
+        };
+        cmdPrint('{');
+        const keys = Object.keys(skills);
+        keys.forEach((k, i) => {
+          const vals = skills[k].map(v => '"' + v + '"').join(', ');
+          const comma = i === keys.length - 1 ? '' : ',';
+          cmdPrint('  "' + k + '": [' + vals + ']' + comma);
+        });
+        cmdPrint('}');
+      }
+
+      // Resolve a path to { dir, name, file } without caring what it is.
+      // Returns null if the containing directory doesn't exist.
+      function locateFile(raw) {
+        const slashAt = raw.lastIndexOf('/');
+        const dirPart = slashAt >= 0 ? raw.slice(0, slashAt + 1) : '';
+        const name    = slashAt >= 0 ? raw.slice(slashAt + 1)    : raw;
+        const dir = dirPart === '' || dirPart === './'
+          ? walkSegments(cwdSegments())
+          : resolvePath(dirPart.replace(/^\.\//, ''), cwdSegments());
+        if (!dir) return null;
+        return {
+          dir:    dir.node,
+          name:   name,
+          isDir:  !!(dir.node.children && dir.node.children[name.toLowerCase()]),
+          file:   dir.node.files ? dir.node.files[name] : undefined,
+        };
+      }
+
+      // `./thing` — run an executable. Mirrors real shell failure modes.
+      function execPath(raw) {
+        const target = raw.replace(/^\.\//, '');
+        if (target === '') { cmdPrint('./: Is a directory', 'err'); return; }
+
+        const found = locateFile('./' + target);
+        if (!found)         { cmdPrint(raw + ': No such file or directory', 'err'); return; }
+        if (found.isDir)    { cmdPrint(raw + ': Is a directory', 'err'); return; }
+        if (!found.file)    { cmdPrint(raw + ': No such file or directory', 'err'); return; }
+        if (found.file.kind !== 'exec') {
+          cmdPrint(raw + ': Permission denied', 'err');
+          return;
+        }
+        found.file.render();
+      }
+
+      function catContact() {
+        // The page truncates this for layout; the shell prints it in full
+        // because you copy from a terminal, you don't click it.
+        cmdPrint('email      rey@exitzero.cc');
+        cmdPrint('github     github.com/ExitZ3ro');
+        cmdPrint('linkedin   linkedin.com/in/rey-dela-cruz-6678aa244');
+        cmdPrint('pgp        [not published]');
+      }
+
+      const COMMANDS = {
+        help: { desc: 'show available commands', fn: () => {
+          cmdPrint('available commands:', 'ok');
+          Object.entries(COMMANDS).forEach(([name, meta]) => {
+            if (meta.hidden) return;
+            cmdPrintCmdRow(name, meta.desc);
+          });
+        }},
+        main:       { desc: 'go to main',              fn: () => { transitionTo('main');       cmdClose(); }},
+        home:       { desc: 'alias for main', hidden: true, fn: () => { transitionTo('main'); cmdClose(); }},
+        experience: { desc: 'open experience',         fn: () => { transitionTo('experience'); cmdClose(); }},
+        exp:        { desc: 'alias for experience', hidden: true, fn: () => { transitionTo('experience'); cmdClose(); }},
+        projects:   { desc: 'open projects',           fn: () => { transitionTo('projects');   cmdClose(); }},
+        whoami:     { desc: 'who is this?',            fn: () => cmdPrint('rey', 'ok') },
+        ls:         { desc: 'list current directory',  fn: () => {
+          const cv = currentView() || 'main';
+          switch (cv) {
+            case 'main':
+              cmdPrint('total 5');
+              cmdPrint('-rw-r--r--  about.md');
+              cmdPrint('-rw-r--r--  skills.json');
+              cmdPrint('-rwxr-xr-x  contact*');
+              cmdPrint('drwxr-xr-x  experience/');
+              cmdPrint('drwxr-xr-x  projects/');
+              break;
+            case 'experience':
+              cmdPrint('total ' + Object.keys(ROLES).length);
+              Object.keys(ROLES).forEach(id => {
+                const r = ROLES[id];
+                cmdPrint('drwxr-xr-x  ' + r.slug + '/');
+              });
+              break;
+            case 'detail':
+              cmdPrint('total 4');
+              cmdPrint('-rw-r--r--  project.md');
+              cmdPrint('drwxr-xr-x  sections/');
+              cmdPrint('-rw-r--r--  stack.json');
+              cmdPrint('drwxr-xr-x  media/');
+              break;
+            case 'auth':
+              cmdPrint('total 3');
+              cmdPrint('-rw-------  .access.lock');
+              cmdPrint('-rw-r--r--  challenge.enc');
+              cmdPrint('-rw-r--r--  hint.txt');
+              break;
+            case 'projects':
+              cmdPrint('total ' + (visible(PROJECTS).length + 1));
+              visible(PROJECTS).forEach(p => cmdPrint('drwxr-xr-x  ' + p.slug + '/'));
+              cmdPrint(projectsUnlocked ? 'drwxr-xr-x  classified/'
+                                        : 'drwx------  classified/  [locked]');
+              break;
+            case 'classified':
+              cmdPrint('total ' + visible(CLASSIFIED).length);
+              visible(CLASSIFIED).forEach(p => cmdPrint('drwxr-xr-x  ' + p.slug + '/'));
+              break;
+            case 'auth':
+              cmdPrint('total 3');
+              cmdPrint('-rw-------  .access.lock');
+              cmdPrint('-rw-r--r--  challenge.enc');
+              cmdPrint('-rw-r--r--  hint.txt');
+              break;
+            case 'projects':
+              cmdPrint('total ' + (visible(PROJECTS).length + 1));
+              visible(PROJECTS).forEach(p => cmdPrint('drwxr-xr-x  ' + p.slug + '/'));
+              cmdPrint(projectsUnlocked ? 'drwxr-xr-x  classified/'
+                                        : 'drwx------  classified/  [locked]');
+              break;
+            case 'classified':
+              cmdPrint('total 6');
+              cmdPrint('drwxr-xr-x  firmware-archaeology/');
+              cmdPrint('drwxr-xr-x  ctf-writeups/');
+              cmdPrint('drwxr-xr-x  protocol-re/');
+              cmdPrint('drwxr-xr-x  flight-sim-tools/');
+              cmdPrint('drwxr-xr-x  crackmes/');
+              cmdPrint('drwxr-xr-x  exitzero.cc/');
+              break;
+            default:
+              cmdPrint('total 0');
+          }
+        }},
+        echo:       { desc: 'print arguments', hidden: true, fn: (args) => {
+          cmdPrint(args.join(' '));
+        }},
+        man:        { desc: 'show manual for a command', fn: (args) => {
+          if (!args || args.length === 0) {
+            cmdPrint('what manual page do you want?', 'err');
+            cmdPrint('for example, try: man help');
+            return;
+          }
+          const target = args[0];
+          const cmd = COMMANDS[target];
+          if (!cmd) {
+            cmdPrint('no manual entry for ' + target, 'err');
+            return;
+          }
+          cmdPrint('NAME', 'ok');
+          cmdPrint('  ' + target + ' — ' + cmd.desc);
+          cmdPrint('');
+          cmdPrint('SYNOPSIS', 'ok');
+          cmdPrint('  ' + target + (target === 'echo' || target === 'man' ? ' [args]' : ''));
+          cmdPrint('');
+          cmdPrint('DESCRIPTION', 'ok');
+          cmdPrint('  ' + cmd.desc + '.');
+          cmdPrint('');
+          cmdPrint('SEE ALSO');
+          cmdPrint('  help(1)');
+        }},
+        clear:      { desc: 'clear output',            fn: () => { cmdOutput.innerHTML = ''; }},
+        cd:         { desc: 'change directory (supports nested paths)', fn: (args) => {
+          const raw = (args[0] || '').trim();
+          if (!raw || raw === '~' || raw === '/') { transitionTo('main'); cmdClose(); return; }
+          if (raw === '..') { navBack(); cmdClose(); return; }
+
+          const res = resolvePath(raw, cwdSegments());
+          if (!res) {
+            cmdPrint('cd: ' + raw + ': no such file or directory', 'err');
+            return;
+          }
+          transitionTo(res.node.view, res.node.param || {});
+          cmdClose();
+        }},
+        exit:       { desc: 'close the command bar',   fn: cmdClose },
+        q:          { desc: 'alias for exit', hidden: true, fn: cmdClose },
+        sudo:       { desc: 'nice try', hidden: true, fn: () => cmdPrint('rey is not in the sudoers file. this incident will be reported.', 'err') },
+        rm:         { desc: 'nope', hidden: true, fn: () => cmdPrint('permission denied.', 'err') },
+        cat:        { desc: 'read a file', fn: (args) => {
+          const raw = (args[0] || '').trim();
+          if (!raw) { cmdPrint('(=^\u30fbw\u30fb^=)', 'ok'); return; }   // bare `cat` keeps the joke
+
+          const slashAt = raw.lastIndexOf('/');
+          const dirPart = slashAt >= 0 ? raw.slice(0, slashAt + 1) : '';
+          const name    = slashAt >= 0 ? raw.slice(slashAt + 1)    : raw;
+
+          const dir = dirPart === ''
+            ? walkSegments(cwdSegments())
+            : resolvePath(dirPart, cwdSegments());
+          if (!dir) { cmdPrint('cat: ' + raw + ': No such file or directory', 'err'); return; }
+
+          // trailing slash, or a name that's actually a directory
+          if (name === '' || (dir.node.children && dir.node.children[name.toLowerCase()])) {
+            cmdPrint('cat: ' + raw + ': Is a directory', 'err');
+            return;
+          }
+          const file = dir.node.files && dir.node.files[name];
+          if (!file) { cmdPrint('cat: ' + raw + ': No such file or directory', 'err'); return; }
+
+          // executables aren't meant to be read
+          if (file.kind === 'exec') {
+            cmdPrint('cat: ' + name + ': binary file — try ./' + name, 'warn');
+            return;
+          }
+          file.render();
+        }},
+      };
+
+      function cmdRun(raw) {
+        const trimmed = raw.trim();
+        if (!trimmed) return;
+        cmdClearMenu();
+        tabState = null;
+        cmdEcho(trimmed);
+        cmdHistory.push(trimmed);
+        cmdHistoryIdx = cmdHistory.length;
+        const parts = trimmed.toLowerCase().split(/\s+/);
+
+        // `./thing` — execution, resolved against the filesystem rather
+        // than the command table, so it errors like a real shell would
+        if (parts[0].startsWith('./')) {
+          execPath(parts[0]);
+          cmdInput.value = '';
+          return;
+        }
+
+        const cmd = COMMANDS[parts[0]];
+        if (cmd) {
+          cmd.fn(parts.slice(1));
+        } else {
+          cmdPrint('command not found: ' + parts[0], 'err');
+          cmdPrint('type "help" for available commands');
+        }
+        cmdInput.value = '';
+      }
+
+      // TAB COMPLETION
+      // Path-aware, and cycles through candidates on repeated Tab
+      // (Shift+Tab goes backwards) while showing a menu of the options
+      // with the current one highlighted — like zsh menu-complete.
+      let tabState  = null;   // { base, candidates, index, lastValue }
+      let cmdMenuEl = null;
+
+      function cmdClearMenu() {
+        if (cmdMenuEl) { cmdMenuEl.remove(); cmdMenuEl = null; }
+      }
+
+      function cmdShowMenu(candidates, index) {
+        cmdClearMenu();
+        cmdMenuEl = document.createElement('div');
+        cmdMenuEl.className = 'line cmd-menu';
+        candidates.forEach((cand, i) => {
+          const span = document.createElement('span');
+          span.className = 'cmd-menu-item' + (i === index ? ' active' : '');
+          span.textContent = cand;
+          cmdMenuEl.appendChild(span);
+        });
+        const hint = document.createElement('span');
+        hint.className = 'cmd-menu-hint';
+        hint.textContent = 'tab cycle · enter / → accept';
+        cmdMenuEl.appendChild(hint);
+        cmdOutput.appendChild(cmdMenuEl);
+        cmdOutput.scrollTop = cmdOutput.scrollHeight;
+      }
+
+      // Work out what's being completed and produce the candidate list.
+      // Returns { base, candidates } where `base` is the text that stays
+      // put and each candidate is appended to it.
+      function buildCompletion(value) {
+        const endsWithSpace = /\s$/.test(value);
+        const trimmed = value.trim();
+        const tokens  = trimmed === '' ? [] : trimmed.split(/\s+/);
+        const cmdName = (tokens[0] || '').toLowerCase();
+
+        const visibleCommands = Object.keys(COMMANDS).filter(c => !COMMANDS[c].hidden);
+
+        // --- completing `./executable` in command position ---
+        if (tokens.length <= 1 && !endsWithSpace && cmdName.startsWith('./')) {
+          const argToken = cmdName.slice(2);
+          const slashAt  = argToken.lastIndexOf('/');
+          const dirPart  = slashAt >= 0 ? argToken.slice(0, slashAt + 1) : '';
+          const segPart  = slashAt >= 0 ? argToken.slice(slashAt + 1) : argToken;
+
+          const parentRes = dirPart === ''
+            ? walkSegments(cwdSegments())
+            : resolvePath(dirPart, cwdSegments());
+          if (!parentRes) return null;
+
+          // only executables can be run — plus directories to descend into
+          const node = parentRes.node;
+          const execs = fileNames(node)
+            .filter(n => node.files[n].kind === 'exec')
+            .filter(n => n.toLowerCase().startsWith(segPart.toLowerCase()));
+          const dirs = childNames(node).filter(n => n.startsWith(segPart.toLowerCase()));
+          const candidates = execs.concat(dirs);
+          return candidates.length ? { base: './' + dirPart, candidates } : null;
+        }
+
+        // --- completing the command name itself ---
+        if (tokens.length === 0 || (tokens.length === 1 && !endsWithSpace)) {
+          const prefix = cmdName;
+          const candidates = visibleCommands.filter(c => c.startsWith(prefix));
+          return candidates.length ? { base: '', candidates } : null;
+        }
+
+        // --- completing a `cd` path argument ---
+        if (cmdName === 'cd') {
+          const argToken = endsWithSpace ? '' : (tokens[1] || '');
+          const slashAt  = argToken.lastIndexOf('/');
+          const dirPart  = slashAt >= 0 ? argToken.slice(0, slashAt + 1) : '';
+          const segPart  = (slashAt >= 0 ? argToken.slice(slashAt + 1) : argToken).toLowerCase();
+
+          // resolve the directory portion so we know which node to list
+          const parentRes = dirPart === ''
+            ? walkSegments(cwdSegments())
+            : resolvePath(dirPart, cwdSegments());
+          if (!parentRes) return null;
+
+          let candidates = childNames(parentRes.node).filter(n => n.startsWith(segPart));
+          // offer `..` and `~` only at the start of a path
+          if (dirPart === '') {
+            ['..', '~'].forEach(extra => {
+              if (extra.startsWith(segPart) || segPart === '') candidates.push(extra);
+            });
+          }
+          return candidates.length ? { base: 'cd ' + dirPart, candidates } : null;
+        }
+
+        // --- completing a `cat` file argument ---
+        if (cmdName === 'cat') {
+          const argToken = endsWithSpace ? '' : (tokens[1] || '');
+          const slashAt  = argToken.lastIndexOf('/');
+          const dirPart  = slashAt >= 0 ? argToken.slice(0, slashAt + 1) : '';
+          const segPart  = slashAt >= 0 ? argToken.slice(slashAt + 1) : argToken;
+
+          const parentRes = dirPart === ''
+            ? walkSegments(cwdSegments())
+            : resolvePath(dirPart, cwdSegments());
+          if (!parentRes) return null;
+
+          // files first, then directories you could descend into
+          const candidates = fileNames(parentRes.node)
+            .filter(n => n.toLowerCase().startsWith(segPart.toLowerCase()))
+            .concat(childNames(parentRes.node).filter(n => n.startsWith(segPart.toLowerCase())));
+          return candidates.length ? { base: 'cat ' + dirPart, candidates } : null;
+        }
+
+        // --- completing a `man` argument ---
+        if (cmdName === 'man') {
+          const argToken = (endsWithSpace ? '' : (tokens[1] || '')).toLowerCase();
+          const candidates = visibleCommands.filter(c => c.startsWith(argToken));
+          return candidates.length ? { base: 'man ', candidates } : null;
+        }
+
+        return null;
+      }
+
+      // Write the highlighted candidate into the input. Directory
+      // candidates get a trailing slash, the way a real shell shows them —
+      // it tells you at a glance that there's something inside.
+      function applyTabCandidate() {
+        const { base, candidates, index } = tabState;
+        const pick = candidates[index];
+        let suffix = '';
+        // works for `cd <path>`, `cat <path>` and `./<path>` — a directory
+        // gets a trailing slash, a file doesn't (resolvePath only finds dirs)
+        const m = base.match(/^(?:cd |cat |\.\/)(.*)$/);
+        if (m && pick !== '..' && pick !== '~') {
+          const probe = resolvePath(m[1] + pick, cwdSegments());
+          if (probe && childNames(probe.node).length > 0) suffix = '/';
+        }
+        cmdInput.value = base + pick + suffix;
+        tabState.lastValue = cmdInput.value;
+      }
+
+      // Lock in whatever is highlighted and end the cycle, so the next
+      // Tab starts a fresh completion (inside the directory just accepted).
+      function acceptTabCandidate() {
+        if (!tabState) return false;
+        applyTabCandidate();
+        cmdClearMenu();
+        tabState = null;
+        return true;
+      }
+
+      function handleTabComplete(direction) {
+        const value = cmdInput.value;
+
+        // continuing an existing cycle — input untouched since last Tab
+        if (tabState && tabState.lastValue === value && tabState.candidates.length > 1) {
+          const n = tabState.candidates.length;
+          tabState.index = (tabState.index + direction + n) % n;
+          applyTabCandidate();
+          cmdShowMenu(tabState.candidates, tabState.index);
+          return;
+        }
+
+        const built = buildCompletion(value);
+        if (!built) { cmdClearMenu(); tabState = null; return; }
+
+        tabState = { base: built.base, candidates: built.candidates, index: 0, lastValue: '' };
+        applyTabCandidate();
+
+        if (built.candidates.length === 1) {
+          // unambiguous — nothing to choose between, so end the session
+          // right away and let the next Tab descend
+          cmdClearMenu();
+          tabState = null;
+        } else {
+          cmdShowMenu(built.candidates, 0);
+        }
+      }
+
+      // any manual typing invalidates the current completion cycle
+      cmdInput.addEventListener('input', () => {
+        tabState = null;
+        cmdClearMenu();
+      });
+
+      cmdInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          // while a completion menu is open, Enter means "take this one" —
+          // it commits the highlight and dismisses the menu so you can read
+          // the result. Press Enter again to actually run it.
+          if (tabState) { acceptTabCandidate(); return; }
+          cmdRun(cmdInput.value);
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          cmdClose();
+        } else if (e.key === 'Tab') {
+          e.preventDefault();
+          handleTabComplete(e.shiftKey ? -1 : 1);
+        } else if (e.key === 'ArrowRight') {
+          // accept the highlighted candidate — but only when the caret is
+          // at the end, so mid-string cursor movement still works normally
+          if (tabState && cmdInput.selectionStart === cmdInput.value.length) {
+            e.preventDefault();
+            acceptTabCandidate();
+          }
+        } else if (e.key === 'ArrowUp') {
+          if (cmdHistory.length === 0) return;
+          e.preventDefault();
+          cmdHistoryIdx = Math.max(0, cmdHistoryIdx - 1);
+          cmdInput.value = cmdHistory[cmdHistoryIdx] || '';
+        } else if (e.key === 'ArrowDown') {
+          if (cmdHistory.length === 0) return;
+          e.preventDefault();
+          cmdHistoryIdx = Math.min(cmdHistory.length, cmdHistoryIdx + 1);
+          cmdInput.value = cmdHistory[cmdHistoryIdx] || '';
+        }
+      });
+
+      // GLOBAL KEYBOARD SHORTCUTS
+      document.addEventListener('keydown', (e) => {
+        const tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        if (!initialized) return;
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+        // dismiss the toast as soon as any shortcut is used
+        const wasShortcut =
+          e.key === '/' || e.key === '?' || e.key === '1' ||
+          e.key === '2' || e.key === 'Escape';
+        if (wasShortcut && window.__dismissKeyHint) window.__dismissKeyHint();
+
+        if (e.key === '/') {
+          e.preventDefault();
+          cmdOpen();
+        } else if (e.key === '?') {
+          e.preventDefault();
+          cmdOpen();
+          setTimeout(() => cmdRun('help'), 40);
+        } else if (e.key === '1') {
+          transitionTo('main');
+        } else if (e.key === '2') {
+          transitionTo('experience');
+        } else if (e.key === '3') {
+          transitionTo('projects');
+        } else if (e.key === 'Escape') {
+          if (!cmdBar.hasAttribute('hidden')) { cmdClose(); return; }
+          navBack();
+        }
+      });
+
+      // navBack — one directory up from the current view. reused by
+      // the Escape key handler AND the `cd ..` shell command.
+      function navBack() {
+        const cv = currentView();
+        if (cv === 'detail')                             transitionTo('experience');
+        else if (cv === 'auth' || cv === 'classified') transitionTo('projects');
+        else if (cv === 'experience' || cv === 'projects' || cv === '404') transitionTo('main');
+      }
+
+      // LANDING REVEAL SEQUENCE
+      //   0ms       — brand + tagline both visible with jumbled chars;
+      //               period stays hidden.
+      //   0→350ms   — PURE SCRAMBLE. no chars locking yet. user sees
+      //               the chaos for a beat before it starts resolving.
+      //   350→2350  — brand resolves left-to-right (2000ms). tagline
+      //               keeps scrambling.
+      //   2350→4150 — tagline resolves left-to-right (1800ms). no gap:
+      //               the first tagline char locks the exact frame the
+      //               last brand char locks (lockPct=1.0 for both).
+      //   4150ms    — magenta "." PUNCHES in.
+      //   ~4250ms   — initialize button fades up (100ms after the dot).
+      (function landingReveal() {
+        const brandEl     = document.querySelector('.brand');
+        const exitEl      = document.querySelector('.brand .exit');
+        const zeroEl      = document.querySelector('.brand .zero');
+        const taglineEl   = document.querySelector('.tagline');
+        const taglineTx   = document.querySelector('.tagline-text');
+        const signatureEl = document.querySelector('.tagline .signature');
+        const initEl      = document.querySelector('.initialize');
+        if (!brandEl || !exitEl || !zeroEl || !taglineEl || !taglineTx || !signatureEl || !initEl) return;
+
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) {
+          brandEl.classList.add('ready');
+          taglineEl.classList.add('ready');
+          signatureEl.classList.add('appear');
+          initEl.classList.add('ready');
+          return;
+        }
+
+        const GLITCH_POOL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*<>[]{}~';
+
+        // resolves text across one or more elements.
+        //   scrambleMs — waiting-room phase where all chars are random
+        //                on every tick. no locking yet.
+        //   resolveMs  — after scramble, chars progressively lock in
+        //                left-to-right over this duration.
+        //   lockPct    — fraction of resolveMs used for locking (1.0 =
+        //                chars distribute over the full resolve).
+        function resolveTextAcross(pieces, resolveMs, lockPct, scrambleMs, onDone) {
+          scrambleMs = scrambleMs || 0;
+          const frameMs        = 32;
+          const scrambleFrames = Math.floor(scrambleMs / frameMs);
+          const resolveFrames  = Math.floor(resolveMs / frameMs);
+          const totalFrames    = scrambleFrames + resolveFrames;
+
+          const ranges = [];
+          let idx = 0;
+          pieces.forEach(p => {
+            ranges.push({ el: p.el, start: idx, end: idx + p.text.length, final: p.text });
+            idx += p.text.length;
+          });
+          const totalLen  = idx;
+          const finalStr  = ranges.map(r => r.final).join('');
+          const lockFrame = (i) =>
+            scrambleFrames + Math.floor((i + 1) / totalLen * resolveFrames * lockPct);
+
+          let frame = 0;
+          (function tick() {
+            let out = '';
+            for (let i = 0; i < finalStr.length; i++) {
+              const ch = finalStr[i];
+              if (ch === ' ') { out += ' '; continue; }
+              if (frame >= lockFrame(i)) {
+                out += ch;
+              } else {
+                out += GLITCH_POOL[Math.floor(Math.random() * GLITCH_POOL.length)];
+              }
+            }
+            ranges.forEach(r => { r.el.textContent = out.slice(r.start, r.end); });
+            frame++;
+            if (frame <= totalFrames) {
+              setTimeout(tick, frameMs);
+            } else {
+              ranges.forEach(r => { r.el.textContent = r.final; });
+              if (onDone) onDone();
+            }
+          })();
+        }
+
+        const BRAND_SCRAMBLE_MS = 350;
+        const BRAND_MS          = 2000;
+        const TAGLINE_MS        = 1800;
+        const POST_DOT_DELAY    = 100;
+
+        // brand: scrambles for 350ms, then resolves over 2000ms
+        resolveTextAcross(
+          [{ el: exitEl, text: 'Exit' }, { el: zeroEl, text: 'Zero' }],
+          BRAND_MS,
+          1.0,
+          BRAND_SCRAMBLE_MS
+        );
+        brandEl.classList.add('ready');
+
+        // tagline: scrambles through brand's entire duration, then
+        // resolves. no perceived gap because lockPct=1.0 on both.
+        resolveTextAcross(
+          [{ el: taglineTx, text: 'Success is leaving no trace' }],
+          TAGLINE_MS,
+          1.0,
+          BRAND_SCRAMBLE_MS + BRAND_MS,   // scramble until brand fully locks
+          () => {
+            // dramatic dot punches in the moment tagline lands
+            signatureEl.classList.add('appear');
+            setTimeout(() => initEl.classList.add('ready'), POST_DOT_DELAY);
+          }
+        );
+        taglineEl.classList.add('ready');
+      })();
+
+      // KEY HINT TOAST (first portfolio entry)
+      const keyHint = document.getElementById('key-hint');
+      let hintShown = false;
+      let dismissHint = null;
+      function showHintOnce() {
+        if (hintShown) return;
+        hintShown = true;
+        keyHint.removeAttribute('hidden');
+        requestAnimationFrame(() => keyHint.classList.add('show'));
+        dismissHint = () => {
+          if (!dismissHint) return;
+          dismissHint = null;
+          keyHint.classList.remove('show');
+          setTimeout(() => keyHint.setAttribute('hidden', ''), 400);
+        };
+        setTimeout(() => { if (dismissHint) dismissHint(); }, 12000);
+      }
+      // expose so keyboard-shortcut handler can dismiss on first use
+      window.__dismissKeyHint = () => { if (dismissHint) dismissHint(); };
+      const portfolioObs = new MutationObserver(() => {
+        if (portfolio.classList.contains('active')) {
+          showHintOnce();
+          portfolioObs.disconnect();
+        }
+      });
+      portfolioObs.observe(portfolio, { attributes: true, attributeFilter: ['class'] });
+
+    })();
+  </script>
+</body>
+</html>
