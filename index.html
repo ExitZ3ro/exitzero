@@ -2041,17 +2041,18 @@
       }
       .role-card .time { padding-top: 0; }
       .workspaces a { padding: 3px 8px; font-size: 11px; }
-      /* Break the declaration the way clang-format would: the string moves
-         to a continuation line with a hanging indent, and the trailing
-         comment drops below the statement it annotates. Desktop keeps the
-         single line. */
+      /* The declaration stays on one line and the type scales to fit it
+         exactly: 50 characters at 0.6em advance, so the size that fills the
+         viewport is (100vw - padding) / (50 * 0.6). Divided by 31 rather
+         than 30 to leave ~3% for a fallback font with a wider advance.
+         Only the trailing comment drops to its own line. */
       .hero .role {
-        font-size: 14px;
-        line-height: 1.9;
+        font-size: clamp(9px, calc((100vw - 32px) / 31), 16px);
+        line-height: 2;
+        white-space: nowrap;
       }
-      .hero .role .syn-str { display: inline-block; margin-left: 2ch; }
-      .hero .role .syn-op::after,
       .hero .role .syn-punct::after { content: "\A"; white-space: pre; }
+      .hero .role .syn-comment { white-space: nowrap; }
 
       .hero .meta {
         grid-template-columns: 1fr;
