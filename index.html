@@ -727,8 +727,8 @@
 
     /* ============ PORTFOLIO ============ */
     #portfolio {
-      position: relative;
       overflow-y: auto;
+      overscroll-behavior-y: contain;
       display: none;
       flex-direction: column;
     }
@@ -1167,6 +1167,7 @@
 
     /* ============ VIDEO FEED (surveillance-style) ============ */
     .role-feed {
+      position: relative;
       margin: 0 0 40px;
       border: 1px solid var(--border-strong);
       background: #000;
