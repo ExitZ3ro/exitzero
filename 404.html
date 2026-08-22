@@ -28,7 +28,13 @@
     --warning:   #ffb800;
     --danger:    #ff4d5e;
     --border:    rgba(77, 255, 176, 0.1);
-    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Menlo', 'Consolas',
+            'DejaVu Sans Mono', 'Liberation Mono', 'Roboto Mono', monospace;
+  }
+  pre, code, kbd, samp, tt,
+  input, button, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
   }
   * { box-sizing: border-box; }
   html, body {
